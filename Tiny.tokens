@@ -1,0 +1,6 @@
+PLUS=1
+TIMES=2
+NUMBER=3
+SPACE=4
+'+'=1
+'*'=2
