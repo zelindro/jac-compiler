@@ -1,4 +1,4 @@
-grammar Tiny;
+grammar Jac;
 
 /*---------------- PARSER INTERNALS ----------------*/
 
@@ -9,8 +9,13 @@ grammar Tiny;
 
 /*---------------- LEXER RULES ----------------*/
 
+PRINT : 'print' ;
+
 PLUS  : '+' ;
 TIMES : '*' ;
+
+OP_PAR : '(' ;
+CL_PAR : ')' ;
 
 NUMBER: '0'..'9'+ ;
 
@@ -32,14 +37,12 @@ program:
     main
     ;
 
-main:
+main: 
     {if 1:
         print('.method public static main([Ljava/lang/String;)V\n')
-        print('    getstatic java/lang/System/out Ljava/io/PrintStream;')
     }
-    expression
+    ( statement )+
     {if 1:
-        print('    invokevirtual java/io/PrintStream/println(I)V\n')
         print('    return')
         print('.limit stack 10')
         print('.end method')
@@ -47,19 +50,32 @@ main:
     }
     ;
 
-expression:
-    term ( op = PLUS expression
+statement: st_print
+    ;
+
+st_print:
+    PRINT OP_PAR
+    {if 1:
+        print('    getstatic java/lang/System/out Ljava/io/PrintStream;')
+    }
+    expression CL_PAR
+    {if 1:
+        print('    invokevirtual java/io/PrintStream/println(I)V\n')
+    }
+    ;
+
+expression: term ( op = PLUS term
     {if 1:
         print('    iadd')
     }
-    )?
+    )*
     ;
 
-term: factor ( op = TIMES term
+term: factor ( op = TIMES factor
     {if 1:
         print('    imul')
     }
-    )?
+    )*
     ;
 
 factor: NUMBER

@@ -2,8 +2,8 @@
 
 import sys
 from antlr4 import *
-from TinyLexer  import TinyLexer
-from TinyParser import TinyParser
+from JacLexer  import JacLexer
+from JacParser import JacParser
 
 if len(sys.argv) > 1:
     sys.stdin = open(sys.argv[1], 'r')
@@ -12,9 +12,9 @@ if len(sys.argv) > 1:
         sys.stdout = open(sys.argv[2], 'w')
 
 input_stream = InputStream(sys.stdin.read())
-lexer = TinyLexer(input_stream)
+lexer = JacLexer(input_stream)
 tokens = CommonTokenStream(lexer)
-parser = TinyParser(tokens)
+parser = JacParser(tokens)
 
 parser.program()
 

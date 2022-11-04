@@ -1,2 +1,17 @@
-java -jar jasmin-2.4.jar Test.j
-java Test
+Raw commands:
+
+  java -jar antlr-4.9.3-complete.jar -Dlanguage=Python3 -no-listener Jac.g4
+  java Test
+
+Run program with input file:
+
+  python compiler.py input.jac Test.j
+  java -jar jasmin-2.4.jar Test.j
+  java Test
+
+Using build and run files:
+
+  ./build.bat
+  ./run.bat 
+      or
+  ./run.bat input.jac

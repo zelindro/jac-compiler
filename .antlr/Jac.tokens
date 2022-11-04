@@ -1,0 +1,12 @@
+PRINT=1
+PLUS=2
+TIMES=3
+OP_PAR=4
+CL_PAR=5
+NUMBER=6
+SPACE=7
+'print'=1
+'+'=2
+'*'=3
+'('=4
+')'=5

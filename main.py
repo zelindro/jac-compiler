@@ -30,7 +30,7 @@ def lexer(s):
       tokens.append('OP_P', '(')
     elif s[i] == ")":
       i += 1
-      tokens.append('CL_P', '(')
+      tokens.append('CL_P', ')')
     elif s[i] == '-':
       i += 1
       tokens.append('MINUS', '-')
