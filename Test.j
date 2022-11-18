@@ -11,15 +11,25 @@
 .method public static main([Ljava/lang/String;)V
 
     getstatic java/lang/System/out Ljava/io/PrintStream;
-    ldc 0
-    invokevirtual java/io/PrintStream/println(I)V
+    ldc 1
+    invokevirtual java/io/PrintStream/print(I)V
 
     getstatic java/lang/System/out Ljava/io/PrintStream;
-    ldc 1
-    ldc 2
-    iadd
-    invokevirtual java/io/PrintStream/println(I)V
+    invokevirtual java/io/PrintStream/println()V
+
+    getstatic java/lang/System/out Ljava/io/PrintStream;
+    ldc 23
+    invokevirtual java/io/PrintStream/print(I)V
+
+    getstatic java/lang/System/out Ljava/io/PrintStream;
+    ldc 456
+    invokevirtual java/io/PrintStream/print(I)V
+
+    getstatic java/lang/System/out Ljava/io/PrintStream;
+    invokevirtual java/io/PrintStream/println()V
 
     return
 .limit stack 10
 .end method
+
+; symbol_table: []

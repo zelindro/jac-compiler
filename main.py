@@ -22,21 +22,21 @@ def lexer(s):
     elif s[i] == '+':
       i += 1
       tokens.append(Token('PLUS', '+'))
+    elif s[i] == '-':
+      i += 1
+      tokens.append('MINUS', '-')
     elif s[i] == '*':
       i += 1
       tokens.append(Token('TIMES', '*'))
+    elif s[i] == '/':
+      i += 1
+      tokens.append('OVER', '/')
     elif s[i] == "(":
       i += 1
       tokens.append('OP_P', '(')
     elif s[i] == ")":
       i += 1
       tokens.append('CL_P', ')')
-    elif s[i] == '-':
-      i += 1
-      tokens.append('MINUS', '-')
-    elif s[i] == '/':
-      i += 1
-      tokens.append('OVER', '/')
     elif s[i] == print:
       i += 1
       tokens.append('PRINT', 'print')
