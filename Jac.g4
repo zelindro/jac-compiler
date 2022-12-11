@@ -6,12 +6,33 @@ grammar Jac;
 {
 import sys;
 symbol_table = []
+
+stack_cur = 0 
+stack_max = 0
+if_max = 1
+while_max = 1
+
+def emit(bytecode, delta):
+    global stack_cur, stack_max
+    stack_cur += delta
+    if stack_cur > stack_max:
+        stack_max = stack_cur
+    print('    ' + bytecode + '    ; delta=' + str(delta))
+
+def if_counter():
+    global if_max
+    if_max += 1
+
 }
 
 /*---------------- LEXER RULES ----------------*/
 
-PRINT : 'print' ;
-READINT : 'readint' ;
+IF       : 'if'       ;
+WHILE    : 'while'    ;
+BREAK    : 'break'    ;
+CONTINUE : 'continue' ;
+PRINT    : 'print'    ;
+READINT  : 'readint'  ;
 
 PLUS  : '+' ;
 MINUS : '-' ;
@@ -19,10 +40,19 @@ TIMES : '*' ;
 OVER  : '/' ;
 REM   : '%' ;
 
-OP_PAR: '(' ;
-CL_PAR: ')' ;
-ATTRIB: '=' ;
-COMMA : ',' ;
+OP_PAR : '(' ;
+CL_PAR : ')' ;
+OP_CUR : '{' ; //curly brackets
+CL_CUR : '}' ;
+ATTRIB : '=' ;
+COMMA  : ',' ;
+
+EQ     : '==' ;
+NE     : '!=' ;
+GT     : '>'  ;
+GE     : '>=' ;
+LT     : '<'  ;
+LE     : '<=' ;
 
 NAME: 'a'..'z'+ ;
 
@@ -57,37 +87,37 @@ main:
         print('    return')
         if (len(symbol_table) > 0):
             print('.limit locals ' + str(len(symbol_table)))
-        print('.limit stack 10')
+        print('.limit stack ' + str(stack_max))
         print('.end method')
         print('\n; symbol_table:', symbol_table)
     }
     ;
 
-statement: st_print | st_attrib
+statement: st_print | st_attrib | st_if | st_while
     ;
 
 st_print:
     PRINT OP_PAR(
     {if 1:
-        print('    getstatic java/lang/System/out Ljava/io/PrintStream;')
+        emit('    getstatic java/lang/System/out Ljava/io/PrintStream;', +1)
     }
     expression
     {if 1:
-        print('    invokevirtual java/io/PrintStream/print(I)V\n')
+        emit('    invokevirtual java/io/PrintStream/print(I)V\n', -2)
     }
     ( COMMA 
     {if 1:
-        print('    getstatic java/lang/System/out Ljava/io/PrintStream;')
+        emit('    getstatic java/lang/System/out Ljava/io/PrintStream;', +1)
     }
     expression
     {if 1:
-        print('    invokevirtual java/io/PrintStream/print(I)V\n')
+        emit('    invokevirtual java/io/PrintStream/print(I)V\n', -2)
     }
     )*
     )? CL_PAR
     {if 1:
-        print('    getstatic java/lang/System/out Ljava/io/PrintStream;')
-        print('    invokevirtual java/io/PrintStream/println()V\n')
+        emit('    getstatic java/lang/System/out Ljava/io/PrintStream;', +1)
+        emit('    invokevirtual java/io/PrintStream/println()V\n', -1)
     }
     ;
 
@@ -95,16 +125,81 @@ st_attrib: NAME ATTRIB expression
     {if 1:
         if $NAME.text not in symbol_table:
             symbol_table.append($NAME.text)
-            print('    istore', symbol_table.index($NAME.text))
+        emit('    istore ' +  str(symbol_table.index($NAME.text)), +1)
     }
     ;
+
+st_if: IF comparison_if
+    {if 1:
+        global if_max
+        local_if = if_max
+        if_max += 1
+    }
+    OP_CUR ( statement )+ CL_CUR
+    {if 1:
+        print('NOT_IF_' + str(local_if) + ':')
+        if_counter()
+    }
+    ;
+
+st_while: WHILE
+    {if 1:
+        global while_max
+        local_while = while_max
+        print('BEGIN_WHILE_' + str(local_while) + ':')  
+    }
+    comparison_while
+    {if 1:
+        while_max += 1
+    }
+    OP_CUR ( statement )+ CL_CUR
+    {if 1:
+        emit('goto BEGIN_WHILE_' + str(local_while), 0)
+        print('END_WHILE_' + str(local_while) + ':')
+    }
+    ;
+
+comparison_if: expression op = ( EQ | NE | GT | GE | LT | LE ) expression
+    {if 1:
+        if $op.type == JacParser.EQ:
+            emit('if_icmpne NOT_IF_'+str(if_max), -2)
+        elif $op.type == JacParser.NE:
+            emit('if_icmpeq NOT_IF_'+str(if_max), -2)
+        elif $op.type == JacParser.GT:
+            emit('if_icmple NOT_IF_'+str(if_max), -2)
+        elif $op.type == JacParser.GE:
+            emit('if_icmplt NOT_IF_'+str(if_max), -2)
+        elif $op.type == JacParser.LT:
+            emit('if_icmpge NOT_IF_'+str(if_max), -2)
+        elif $op.type == JacParser.LE:
+            emit('if_icmpgt NOT_IF_'+str(if_max), -2)
+    }
+    ;
+
+comparison_while: expression op = ( EQ | NE | GT | GE | LT | LE ) expression
+    {if 1:
+        if $op.type == JacParser.EQ:
+            emit('if_icmpne END_WHILE_'+str(while_max), -2)
+        elif $op.type == JacParser.NE:
+            emit('if_icmpeq END_WHILE_'+str(while_max), -2)
+        elif $op.type == JacParser.GT:
+            emit('if_icmple END_WHILE_'+str(while_max), -2)
+        elif $op.type == JacParser.GE:
+            emit('if_icmplt END_WHILE_'+str(while_max), -2)
+        elif $op.type == JacParser.LT:
+            emit('if_icmpge END_WHILE_'+str(while_max), -2)
+        elif $op.type == JacParser.LE:
+            emit('if_icmpgt END_WHILE_'+str(while_max), -2)
+    }
+    ;
+
 
 expression: term ( op = ( PLUS | MINUS ) term
     {if 1:
         if $op.type == JacParser.PLUS:
-            print('    iadd')
+            emit('    iadd', -1)
         else:
-            print('    isub')
+            emit('    isub', -1)
     }
     )*
     ;
@@ -112,30 +207,26 @@ expression: term ( op = ( PLUS | MINUS ) term
 term: factor ( op = ( TIMES | OVER | REM ) factor
     {if 1:
         if   $op.type == JacParser.TIMES:
-            print('    imul')
+            emit('    imul', -1)
         elif $op.type == JacParser.OVER:
-            print('    idiv')
+            emit('    idiv', -1)
         else:
-            print('    irem')
+            emit('    irem', -1)
     }
     )*
     ;
 
 factor: NUMBER
     {if 1:
-        print('    ldc ' + $NUMBER.text)
+        emit('    ldc ' + str($NUMBER.text), +1)
     }
     | OP_PAR expression CL_PAR
     | NAME
     {if 1:
-        #procurar $NAME.text se nao existir retornar sys.exit(1) retornar erro quando variavel utilizada nao é atribuida
-        if ($NAME.text not in symbol_table):
-            print('Variavel ', $NAME.text ,' nao declarada')
-            sys.exit(1)
-        print('    iload', symbol_table.index($NAME.text))
+        emit('    iload ' +  str(symbol_table.index($NAME.text)), +1)
     }
     | READINT OP_PAR CL_PAR
     {if 1:
-        print('    invokestatic Runtime/readInt()I')
+        emit('    invokestatic Runtime/readInt()I', +1)
     }
     ;
