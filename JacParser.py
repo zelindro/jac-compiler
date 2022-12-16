@@ -32,51 +32,52 @@ def if_counter():
 
 def serializedATN():
     with StringIO() as buf:
-        buf.write("\3\u608b\ua72a\u8133\ub9ed\u417c\u3be7\u7786\u5964\3\35")
-        buf.write("\u008a\4\2\t\2\4\3\t\3\4\4\t\4\4\5\t\5\4\6\t\6\4\7\t\7")
+        buf.write("\3\u608b\ua72a\u8133\ub9ed\u417c\u3be7\u7786\u5964\3!")
+        buf.write("\u008d\4\2\t\2\4\3\t\3\4\4\t\4\4\5\t\5\4\6\t\6\4\7\t\7")
         buf.write("\4\b\t\b\4\t\t\t\4\n\t\n\4\13\t\13\4\f\t\f\4\r\t\r\3\2")
         buf.write("\3\2\3\2\3\3\3\3\6\3 \n\3\r\3\16\3!\3\3\3\3\3\4\3\4\3")
-        buf.write("\4\3\4\5\4*\n\4\3\5\3\5\3\5\3\5\3\5\3\5\3\5\3\5\3\5\3")
-        buf.write("\5\7\5\66\n\5\f\5\16\59\13\5\5\5;\n\5\3\5\3\5\3\5\3\6")
-        buf.write("\3\6\3\6\3\6\3\6\3\7\3\7\3\7\3\7\3\7\6\7J\n\7\r\7\16\7")
-        buf.write("K\3\7\3\7\3\7\3\b\3\b\3\b\3\b\3\b\3\b\6\bW\n\b\r\b\16")
-        buf.write("\bX\3\b\3\b\3\b\3\t\3\t\3\t\3\t\3\t\3\n\3\n\3\n\3\n\3")
-        buf.write("\n\3\13\3\13\3\13\3\13\3\13\7\13m\n\13\f\13\16\13p\13")
-        buf.write("\13\3\f\3\f\3\f\3\f\3\f\7\fw\n\f\f\f\16\fz\13\f\3\r\3")
-        buf.write("\r\3\r\3\r\3\r\3\r\3\r\3\r\3\r\3\r\3\r\3\r\5\r\u0088\n")
-        buf.write("\r\3\r\2\2\16\2\4\6\b\n\f\16\20\22\24\26\30\2\5\3\2\24")
-        buf.write("\31\3\2\t\n\3\2\13\r\2\u008a\2\32\3\2\2\2\4\35\3\2\2\2")
-        buf.write("\6)\3\2\2\2\b+\3\2\2\2\n?\3\2\2\2\fD\3\2\2\2\16P\3\2\2")
-        buf.write("\2\20]\3\2\2\2\22b\3\2\2\2\24g\3\2\2\2\26q\3\2\2\2\30")
-        buf.write("\u0087\3\2\2\2\32\33\b\2\1\2\33\34\5\4\3\2\34\3\3\2\2")
-        buf.write("\2\35\37\b\3\1\2\36 \5\6\4\2\37\36\3\2\2\2 !\3\2\2\2!")
-        buf.write("\37\3\2\2\2!\"\3\2\2\2\"#\3\2\2\2#$\b\3\1\2$\5\3\2\2\2")
-        buf.write("%*\5\b\5\2&*\5\n\6\2\'*\5\f\7\2(*\5\16\b\2)%\3\2\2\2)")
-        buf.write("&\3\2\2\2)\'\3\2\2\2)(\3\2\2\2*\7\3\2\2\2+,\7\7\2\2,:")
-        buf.write("\7\16\2\2-.\b\5\1\2./\5\24\13\2/\67\b\5\1\2\60\61\7\23")
-        buf.write("\2\2\61\62\b\5\1\2\62\63\5\24\13\2\63\64\b\5\1\2\64\66")
-        buf.write("\3\2\2\2\65\60\3\2\2\2\669\3\2\2\2\67\65\3\2\2\2\678\3")
-        buf.write("\2\2\28;\3\2\2\29\67\3\2\2\2:-\3\2\2\2:;\3\2\2\2;<\3\2")
-        buf.write("\2\2<=\7\17\2\2=>\b\5\1\2>\t\3\2\2\2?@\7\32\2\2@A\7\22")
-        buf.write("\2\2AB\5\24\13\2BC\b\6\1\2C\13\3\2\2\2DE\7\3\2\2EF\5\20")
-        buf.write("\t\2FG\b\7\1\2GI\7\20\2\2HJ\5\6\4\2IH\3\2\2\2JK\3\2\2")
-        buf.write("\2KI\3\2\2\2KL\3\2\2\2LM\3\2\2\2MN\7\21\2\2NO\b\7\1\2")
-        buf.write("O\r\3\2\2\2PQ\7\4\2\2QR\b\b\1\2RS\5\22\n\2ST\b\b\1\2T")
-        buf.write("V\7\20\2\2UW\5\6\4\2VU\3\2\2\2WX\3\2\2\2XV\3\2\2\2XY\3")
-        buf.write("\2\2\2YZ\3\2\2\2Z[\7\21\2\2[\\\b\b\1\2\\\17\3\2\2\2]^")
-        buf.write("\5\24\13\2^_\t\2\2\2_`\5\24\13\2`a\b\t\1\2a\21\3\2\2\2")
-        buf.write("bc\5\24\13\2cd\t\2\2\2de\5\24\13\2ef\b\n\1\2f\23\3\2\2")
-        buf.write("\2gn\5\26\f\2hi\t\3\2\2ij\5\26\f\2jk\b\13\1\2km\3\2\2")
-        buf.write("\2lh\3\2\2\2mp\3\2\2\2nl\3\2\2\2no\3\2\2\2o\25\3\2\2\2")
-        buf.write("pn\3\2\2\2qx\5\30\r\2rs\t\4\2\2st\5\30\r\2tu\b\f\1\2u")
-        buf.write("w\3\2\2\2vr\3\2\2\2wz\3\2\2\2xv\3\2\2\2xy\3\2\2\2y\27")
-        buf.write("\3\2\2\2zx\3\2\2\2{|\7\33\2\2|\u0088\b\r\1\2}~\7\16\2")
-        buf.write("\2~\177\5\24\13\2\177\u0080\7\17\2\2\u0080\u0088\3\2\2")
-        buf.write("\2\u0081\u0082\7\32\2\2\u0082\u0088\b\r\1\2\u0083\u0084")
-        buf.write("\7\b\2\2\u0084\u0085\7\16\2\2\u0085\u0086\7\17\2\2\u0086")
-        buf.write("\u0088\b\r\1\2\u0087{\3\2\2\2\u0087}\3\2\2\2\u0087\u0081")
-        buf.write("\3\2\2\2\u0087\u0083\3\2\2\2\u0088\31\3\2\2\2\13!)\67")
-        buf.write(":KXnx\u0087")
+        buf.write("\4\3\4\3\4\5\4+\n\4\3\5\3\5\3\5\3\5\3\5\3\5\3\5\3\5\3")
+        buf.write("\5\3\5\7\5\67\n\5\f\5\16\5:\13\5\5\5<\n\5\3\5\3\5\3\5")
+        buf.write("\3\6\3\6\3\6\3\6\3\6\3\7\3\7\3\7\3\7\3\7\3\7\6\7L\n\7")
+        buf.write("\r\7\16\7M\3\7\3\7\3\7\3\b\3\b\3\b\3\b\3\b\3\b\3\b\6\b")
+        buf.write("Z\n\b\r\b\16\b[\3\b\3\b\3\b\3\t\3\t\3\t\3\t\3\t\3\n\3")
+        buf.write("\n\3\n\3\n\3\n\3\13\3\13\3\13\3\13\3\13\7\13p\n\13\f\13")
+        buf.write("\16\13s\13\13\3\f\3\f\3\f\3\f\3\f\7\fz\n\f\f\f\16\f}\13")
+        buf.write("\f\3\r\3\r\3\r\3\r\3\r\3\r\3\r\3\r\3\r\3\r\3\r\3\r\5\r")
+        buf.write("\u008b\n\r\3\r\2\2\16\2\4\6\b\n\f\16\20\22\24\26\30\2")
+        buf.write("\5\3\2\25\32\3\2\t\n\3\2\13\r\2\u008e\2\32\3\2\2\2\4\35")
+        buf.write("\3\2\2\2\6*\3\2\2\2\b,\3\2\2\2\n@\3\2\2\2\fE\3\2\2\2\16")
+        buf.write("R\3\2\2\2\20`\3\2\2\2\22e\3\2\2\2\24j\3\2\2\2\26t\3\2")
+        buf.write("\2\2\30\u008a\3\2\2\2\32\33\b\2\1\2\33\34\5\4\3\2\34\3")
+        buf.write("\3\2\2\2\35\37\b\3\1\2\36 \5\6\4\2\37\36\3\2\2\2 !\3\2")
+        buf.write("\2\2!\37\3\2\2\2!\"\3\2\2\2\"#\3\2\2\2#$\b\3\1\2$\5\3")
+        buf.write("\2\2\2%+\7\36\2\2&+\5\b\5\2\'+\5\n\6\2(+\5\f\7\2)+\5\16")
+        buf.write("\b\2*%\3\2\2\2*&\3\2\2\2*\'\3\2\2\2*(\3\2\2\2*)\3\2\2")
+        buf.write("\2+\7\3\2\2\2,-\7\7\2\2-;\7\17\2\2./\b\5\1\2/\60\5\24")
+        buf.write("\13\2\608\b\5\1\2\61\62\7\24\2\2\62\63\b\5\1\2\63\64\5")
+        buf.write("\24\13\2\64\65\b\5\1\2\65\67\3\2\2\2\66\61\3\2\2\2\67")
+        buf.write(":\3\2\2\28\66\3\2\2\289\3\2\2\29<\3\2\2\2:8\3\2\2\2;.")
+        buf.write("\3\2\2\2;<\3\2\2\2<=\3\2\2\2=>\7\20\2\2>?\b\5\1\2?\t\3")
+        buf.write("\2\2\2@A\7\33\2\2AB\7\23\2\2BC\5\24\13\2CD\b\6\1\2D\13")
+        buf.write("\3\2\2\2EF\7\3\2\2FG\5\20\t\2GH\b\7\1\2HI\7\16\2\2IK\7")
+        buf.write(" \2\2JL\5\6\4\2KJ\3\2\2\2LM\3\2\2\2MK\3\2\2\2MN\3\2\2")
+        buf.write("\2NO\3\2\2\2OP\7!\2\2PQ\b\7\1\2Q\r\3\2\2\2RS\7\4\2\2S")
+        buf.write("T\b\b\1\2TU\5\22\n\2UV\b\b\1\2VW\7\16\2\2WY\7 \2\2XZ\5")
+        buf.write("\6\4\2YX\3\2\2\2Z[\3\2\2\2[Y\3\2\2\2[\\\3\2\2\2\\]\3\2")
+        buf.write("\2\2]^\7!\2\2^_\b\b\1\2_\17\3\2\2\2`a\5\24\13\2ab\t\2")
+        buf.write("\2\2bc\5\24\13\2cd\b\t\1\2d\21\3\2\2\2ef\5\24\13\2fg\t")
+        buf.write("\2\2\2gh\5\24\13\2hi\b\n\1\2i\23\3\2\2\2jq\5\26\f\2kl")
+        buf.write("\t\3\2\2lm\5\26\f\2mn\b\13\1\2np\3\2\2\2ok\3\2\2\2ps\3")
+        buf.write("\2\2\2qo\3\2\2\2qr\3\2\2\2r\25\3\2\2\2sq\3\2\2\2t{\5\30")
+        buf.write("\r\2uv\t\4\2\2vw\5\30\r\2wx\b\f\1\2xz\3\2\2\2yu\3\2\2")
+        buf.write("\2z}\3\2\2\2{y\3\2\2\2{|\3\2\2\2|\27\3\2\2\2}{\3\2\2\2")
+        buf.write("~\177\7\34\2\2\177\u008b\b\r\1\2\u0080\u0081\7\17\2\2")
+        buf.write("\u0081\u0082\5\24\13\2\u0082\u0083\7\20\2\2\u0083\u008b")
+        buf.write("\3\2\2\2\u0084\u0085\7\33\2\2\u0085\u008b\b\r\1\2\u0086")
+        buf.write("\u0087\7\b\2\2\u0087\u0088\7\17\2\2\u0088\u0089\7\20\2")
+        buf.write("\2\u0089\u008b\b\r\1\2\u008a~\3\2\2\2\u008a\u0080\3\2")
+        buf.write("\2\2\u008a\u0084\3\2\2\2\u008a\u0086\3\2\2\2\u008b\31")
+        buf.write("\3\2\2\2\13!*8;M[q{\u008a")
         return buf.getvalue()
 
 
@@ -92,14 +93,14 @@ class JacParser ( Parser ):
 
     literalNames = [ "<INVALID>", "'if'", "'while'", "'break'", "'continue'", 
                      "'print'", "'readint'", "'+'", "'-'", "'*'", "'/'", 
-                     "'%'", "'('", "')'", "'{'", "'}'", "'='", "','", "'=='", 
-                     "'!='", "'>'", "'>='", "'<'", "'<='" ]
+                     "'%'", "':'", "'('", "')'", "'{'", "'}'", "'='", "','", 
+                     "'=='", "'!='", "'>'", "'>='", "'<'", "'<='" ]
 
     symbolicNames = [ "<INVALID>", "IF", "WHILE", "BREAK", "CONTINUE", "PRINT", 
                       "READINT", "PLUS", "MINUS", "TIMES", "OVER", "REM", 
-                      "OP_PAR", "CL_PAR", "OP_CUR", "CL_CUR", "ATTRIB", 
+                      "COLON", "OP_PAR", "CL_PAR", "OP_CUR", "CL_CUR", "ATTRIB", 
                       "COMMA", "EQ", "NE", "GT", "GE", "LT", "LE", "NAME", 
-                      "NUMBER", "SPACE", "COMMENT" ]
+                      "NUMBER", "COMMENT", "NL", "SPACE", "INDENT", "DEDENT" ]
 
     RULE_program = 0
     RULE_main = 1
@@ -130,22 +131,26 @@ class JacParser ( Parser ):
     TIMES=9
     OVER=10
     REM=11
-    OP_PAR=12
-    CL_PAR=13
-    OP_CUR=14
-    CL_CUR=15
-    ATTRIB=16
-    COMMA=17
-    EQ=18
-    NE=19
-    GT=20
-    GE=21
-    LT=22
-    LE=23
-    NAME=24
-    NUMBER=25
-    SPACE=26
+    COLON=12
+    OP_PAR=13
+    CL_PAR=14
+    OP_CUR=15
+    CL_CUR=16
+    ATTRIB=17
+    COMMA=18
+    EQ=19
+    NE=20
+    GT=21
+    GE=22
+    LT=23
+    LE=24
+    NAME=25
+    NUMBER=26
     COMMENT=27
+    NL=28
+    SPACE=29
+    INDENT=30
+    DEDENT=31
 
     def __init__(self, input:TokenStream, output:TextIO = sys.stdout):
         super().__init__(input, output)
@@ -239,7 +244,7 @@ class JacParser ( Parser ):
                 self.state = 31 
                 self._errHandler.sync(self)
                 _la = self._input.LA(1)
-                if not ((((_la) & ~0x3f) == 0 and ((1 << _la) & ((1 << JacParser.IF) | (1 << JacParser.WHILE) | (1 << JacParser.PRINT) | (1 << JacParser.NAME))) != 0)):
+                if not ((((_la) & ~0x3f) == 0 and ((1 << _la) & ((1 << JacParser.IF) | (1 << JacParser.WHILE) | (1 << JacParser.PRINT) | (1 << JacParser.NAME) | (1 << JacParser.NL))) != 0)):
                     break
 
             if 1:
@@ -265,6 +270,9 @@ class JacParser ( Parser ):
         def __init__(self, parser, parent:ParserRuleContext=None, invokingState:int=-1):
             super().__init__(parent, invokingState)
             self.parser = parser
+
+        def NL(self):
+            return self.getToken(JacParser.NL, 0)
 
         def st_print(self):
             return self.getTypedRuleContext(JacParser.St_printContext,0)
@@ -293,27 +301,32 @@ class JacParser ( Parser ):
         localctx = JacParser.StatementContext(self, self._ctx, self.state)
         self.enterRule(localctx, 4, self.RULE_statement)
         try:
-            self.state = 39
+            self.state = 40
             self._errHandler.sync(self)
             token = self._input.LA(1)
-            if token in [JacParser.PRINT]:
+            if token in [JacParser.NL]:
                 self.enterOuterAlt(localctx, 1)
                 self.state = 35
+                self.match(JacParser.NL)
+                pass
+            elif token in [JacParser.PRINT]:
+                self.enterOuterAlt(localctx, 2)
+                self.state = 36
                 self.st_print()
                 pass
             elif token in [JacParser.NAME]:
-                self.enterOuterAlt(localctx, 2)
-                self.state = 36
+                self.enterOuterAlt(localctx, 3)
+                self.state = 37
                 self.st_attrib()
                 pass
             elif token in [JacParser.IF]:
-                self.enterOuterAlt(localctx, 3)
-                self.state = 37
+                self.enterOuterAlt(localctx, 4)
+                self.state = 38
                 self.st_if()
                 pass
             elif token in [JacParser.WHILE]:
-                self.enterOuterAlt(localctx, 4)
-                self.state = 38
+                self.enterOuterAlt(localctx, 5)
+                self.state = 39
                 self.st_while()
                 pass
             else:
@@ -370,43 +383,43 @@ class JacParser ( Parser ):
         self._la = 0 # Token type
         try:
             self.enterOuterAlt(localctx, 1)
-            self.state = 41
-            self.match(JacParser.PRINT)
             self.state = 42
+            self.match(JacParser.PRINT)
+            self.state = 43
             self.match(JacParser.OP_PAR)
-            self.state = 56
+            self.state = 57
             self._errHandler.sync(self)
             _la = self._input.LA(1)
             if (((_la) & ~0x3f) == 0 and ((1 << _la) & ((1 << JacParser.READINT) | (1 << JacParser.OP_PAR) | (1 << JacParser.NAME) | (1 << JacParser.NUMBER))) != 0):
                 if 1:
                         emit('    getstatic java/lang/System/out Ljava/io/PrintStream;', +1)
                     
-                self.state = 44
+                self.state = 45
                 self.expression()
                 if 1:
                         emit('    invokevirtual java/io/PrintStream/print(I)V\n', -2)
                     
-                self.state = 53
+                self.state = 54
                 self._errHandler.sync(self)
                 _la = self._input.LA(1)
                 while _la==JacParser.COMMA:
-                    self.state = 46
+                    self.state = 47
                     self.match(JacParser.COMMA)
                     if 1:
                             emit('    getstatic java/lang/System/out Ljava/io/PrintStream;', +1)
                         
-                    self.state = 48
+                    self.state = 49
                     self.expression()
                     if 1:
                             emit('    invokevirtual java/io/PrintStream/print(I)V\n', -2)
                         
-                    self.state = 55
+                    self.state = 56
                     self._errHandler.sync(self)
                     _la = self._input.LA(1)
 
 
 
-            self.state = 58
+            self.state = 59
             self.match(JacParser.CL_PAR)
             if 1:
                     emit('    getstatic java/lang/System/out Ljava/io/PrintStream;', +1)
@@ -451,11 +464,11 @@ class JacParser ( Parser ):
         self.enterRule(localctx, 8, self.RULE_st_attrib)
         try:
             self.enterOuterAlt(localctx, 1)
-            self.state = 61
-            localctx._NAME = self.match(JacParser.NAME)
             self.state = 62
-            self.match(JacParser.ATTRIB)
+            localctx._NAME = self.match(JacParser.NAME)
             self.state = 63
+            self.match(JacParser.ATTRIB)
+            self.state = 64
             self.expression()
             if 1:
                     if (None if localctx._NAME is None else localctx._NAME.text) not in symbol_table:
@@ -485,11 +498,14 @@ class JacParser ( Parser ):
             return self.getTypedRuleContext(JacParser.Comparison_ifContext,0)
 
 
-        def OP_CUR(self):
-            return self.getToken(JacParser.OP_CUR, 0)
+        def COLON(self):
+            return self.getToken(JacParser.COLON, 0)
 
-        def CL_CUR(self):
-            return self.getToken(JacParser.CL_CUR, 0)
+        def INDENT(self):
+            return self.getToken(JacParser.INDENT, 0)
+
+        def DEDENT(self):
+            return self.getToken(JacParser.DEDENT, 0)
 
         def statement(self, i:int=None):
             if i is None:
@@ -511,31 +527,33 @@ class JacParser ( Parser ):
         self._la = 0 # Token type
         try:
             self.enterOuterAlt(localctx, 1)
-            self.state = 66
-            self.match(JacParser.IF)
             self.state = 67
+            self.match(JacParser.IF)
+            self.state = 68
             self.comparison_if()
             if 1:
                     global if_max
                     local_if = if_max
                     if_max += 1
                 
-            self.state = 69
-            self.match(JacParser.OP_CUR)
-            self.state = 71 
+            self.state = 70
+            self.match(JacParser.COLON)
+            self.state = 71
+            self.match(JacParser.INDENT)
+            self.state = 73 
             self._errHandler.sync(self)
             _la = self._input.LA(1)
             while True:
-                self.state = 70
+                self.state = 72
                 self.statement()
-                self.state = 73 
+                self.state = 75 
                 self._errHandler.sync(self)
                 _la = self._input.LA(1)
-                if not ((((_la) & ~0x3f) == 0 and ((1 << _la) & ((1 << JacParser.IF) | (1 << JacParser.WHILE) | (1 << JacParser.PRINT) | (1 << JacParser.NAME))) != 0)):
+                if not ((((_la) & ~0x3f) == 0 and ((1 << _la) & ((1 << JacParser.IF) | (1 << JacParser.WHILE) | (1 << JacParser.PRINT) | (1 << JacParser.NAME) | (1 << JacParser.NL))) != 0)):
                     break
 
-            self.state = 75
-            self.match(JacParser.CL_CUR)
+            self.state = 77
+            self.match(JacParser.DEDENT)
             if 1:
                     print('NOT_IF_' + str(local_if) + ':')
                     if_counter()
@@ -563,11 +581,14 @@ class JacParser ( Parser ):
             return self.getTypedRuleContext(JacParser.Comparison_whileContext,0)
 
 
-        def OP_CUR(self):
-            return self.getToken(JacParser.OP_CUR, 0)
+        def COLON(self):
+            return self.getToken(JacParser.COLON, 0)
 
-        def CL_CUR(self):
-            return self.getToken(JacParser.CL_CUR, 0)
+        def INDENT(self):
+            return self.getToken(JacParser.INDENT, 0)
+
+        def DEDENT(self):
+            return self.getToken(JacParser.DEDENT, 0)
 
         def statement(self, i:int=None):
             if i is None:
@@ -589,34 +610,36 @@ class JacParser ( Parser ):
         self._la = 0 # Token type
         try:
             self.enterOuterAlt(localctx, 1)
-            self.state = 78
+            self.state = 80
             self.match(JacParser.WHILE)
             if 1:
                     global while_max
                     local_while = while_max
                     print('BEGIN_WHILE_' + str(local_while) + ':')  
                 
-            self.state = 80
+            self.state = 82
             self.comparison_while()
             if 1:
                     while_max += 1
                 
-            self.state = 82
-            self.match(JacParser.OP_CUR)
-            self.state = 84 
+            self.state = 84
+            self.match(JacParser.COLON)
+            self.state = 85
+            self.match(JacParser.INDENT)
+            self.state = 87 
             self._errHandler.sync(self)
             _la = self._input.LA(1)
             while True:
-                self.state = 83
+                self.state = 86
                 self.statement()
-                self.state = 86 
+                self.state = 89 
                 self._errHandler.sync(self)
                 _la = self._input.LA(1)
-                if not ((((_la) & ~0x3f) == 0 and ((1 << _la) & ((1 << JacParser.IF) | (1 << JacParser.WHILE) | (1 << JacParser.PRINT) | (1 << JacParser.NAME))) != 0)):
+                if not ((((_la) & ~0x3f) == 0 and ((1 << _la) & ((1 << JacParser.IF) | (1 << JacParser.WHILE) | (1 << JacParser.PRINT) | (1 << JacParser.NAME) | (1 << JacParser.NL))) != 0)):
                     break
 
-            self.state = 88
-            self.match(JacParser.CL_CUR)
+            self.state = 91
+            self.match(JacParser.DEDENT)
             if 1:
                     emit('goto BEGIN_WHILE_' + str(local_while), 0)
                     print('END_WHILE_' + str(local_while) + ':')
@@ -676,9 +699,9 @@ class JacParser ( Parser ):
         self._la = 0 # Token type
         try:
             self.enterOuterAlt(localctx, 1)
-            self.state = 91
+            self.state = 94
             self.expression()
-            self.state = 92
+            self.state = 95
             localctx.op = self._input.LT(1)
             _la = self._input.LA(1)
             if not((((_la) & ~0x3f) == 0 and ((1 << _la) & ((1 << JacParser.EQ) | (1 << JacParser.NE) | (1 << JacParser.GT) | (1 << JacParser.GE) | (1 << JacParser.LT) | (1 << JacParser.LE))) != 0)):
@@ -686,7 +709,7 @@ class JacParser ( Parser ):
             else:
                 self._errHandler.reportMatch(self)
                 self.consume()
-            self.state = 93
+            self.state = 96
             self.expression()
             if 1:
                     if (0 if localctx.op is None else localctx.op.type) == JacParser.EQ:
@@ -757,9 +780,9 @@ class JacParser ( Parser ):
         self._la = 0 # Token type
         try:
             self.enterOuterAlt(localctx, 1)
-            self.state = 96
+            self.state = 99
             self.expression()
-            self.state = 97
+            self.state = 100
             localctx.op = self._input.LT(1)
             _la = self._input.LA(1)
             if not((((_la) & ~0x3f) == 0 and ((1 << _la) & ((1 << JacParser.EQ) | (1 << JacParser.NE) | (1 << JacParser.GT) | (1 << JacParser.GE) | (1 << JacParser.LT) | (1 << JacParser.LE))) != 0)):
@@ -767,7 +790,7 @@ class JacParser ( Parser ):
             else:
                 self._errHandler.reportMatch(self)
                 self.consume()
-            self.state = 98
+            self.state = 101
             self.expression()
             if 1:
                     if (0 if localctx.op is None else localctx.op.type) == JacParser.EQ:
@@ -832,13 +855,13 @@ class JacParser ( Parser ):
         self._la = 0 # Token type
         try:
             self.enterOuterAlt(localctx, 1)
-            self.state = 101
+            self.state = 104
             self.term()
-            self.state = 108
+            self.state = 111
             self._errHandler.sync(self)
             _la = self._input.LA(1)
             while _la==JacParser.PLUS or _la==JacParser.MINUS:
-                self.state = 102
+                self.state = 105
                 localctx.op = self._input.LT(1)
                 _la = self._input.LA(1)
                 if not(_la==JacParser.PLUS or _la==JacParser.MINUS):
@@ -846,7 +869,7 @@ class JacParser ( Parser ):
                 else:
                     self._errHandler.reportMatch(self)
                     self.consume()
-                self.state = 103
+                self.state = 106
                 self.term()
                 if 1:
                         if (0 if localctx.op is None else localctx.op.type) == JacParser.PLUS:
@@ -854,7 +877,7 @@ class JacParser ( Parser ):
                         else:
                             emit('    isub', -1)
                     
-                self.state = 110
+                self.state = 113
                 self._errHandler.sync(self)
                 _la = self._input.LA(1)
 
@@ -913,13 +936,13 @@ class JacParser ( Parser ):
         self._la = 0 # Token type
         try:
             self.enterOuterAlt(localctx, 1)
-            self.state = 111
+            self.state = 114
             self.factor()
-            self.state = 118
+            self.state = 121
             self._errHandler.sync(self)
             _la = self._input.LA(1)
             while (((_la) & ~0x3f) == 0 and ((1 << _la) & ((1 << JacParser.TIMES) | (1 << JacParser.OVER) | (1 << JacParser.REM))) != 0):
-                self.state = 112
+                self.state = 115
                 localctx.op = self._input.LT(1)
                 _la = self._input.LA(1)
                 if not((((_la) & ~0x3f) == 0 and ((1 << _la) & ((1 << JacParser.TIMES) | (1 << JacParser.OVER) | (1 << JacParser.REM))) != 0)):
@@ -927,17 +950,17 @@ class JacParser ( Parser ):
                 else:
                     self._errHandler.reportMatch(self)
                     self.consume()
-                self.state = 113
+                self.state = 116
                 self.factor()
                 if 1:
-                        if   (0 if localctx.op is None else localctx.op.type) == JacParser.TIMES:
+                        if (0 if localctx.op is None else localctx.op.type) == JacParser.TIMES:
                             emit('    imul', -1)
                         elif (0 if localctx.op is None else localctx.op.type) == JacParser.OVER:
                             emit('    idiv', -1)
                         else:
                             emit('    irem', -1)
                     
-                self.state = 120
+                self.state = 123
                 self._errHandler.sync(self)
                 _la = self._input.LA(1)
 
@@ -989,12 +1012,12 @@ class JacParser ( Parser ):
         localctx = JacParser.FactorContext(self, self._ctx, self.state)
         self.enterRule(localctx, 22, self.RULE_factor)
         try:
-            self.state = 133
+            self.state = 136
             self._errHandler.sync(self)
             token = self._input.LA(1)
             if token in [JacParser.NUMBER]:
                 self.enterOuterAlt(localctx, 1)
-                self.state = 121
+                self.state = 124
                 localctx._NUMBER = self.match(JacParser.NUMBER)
                 if 1:
                         emit('    ldc ' + str((None if localctx._NUMBER is None else localctx._NUMBER.text)), +1)
@@ -1002,28 +1025,32 @@ class JacParser ( Parser ):
                 pass
             elif token in [JacParser.OP_PAR]:
                 self.enterOuterAlt(localctx, 2)
-                self.state = 123
+                self.state = 126
                 self.match(JacParser.OP_PAR)
-                self.state = 124
+                self.state = 127
                 self.expression()
-                self.state = 125
+                self.state = 128
                 self.match(JacParser.CL_PAR)
                 pass
             elif token in [JacParser.NAME]:
                 self.enterOuterAlt(localctx, 3)
-                self.state = 127
+                self.state = 130
                 localctx._NAME = self.match(JacParser.NAME)
                 if 1:
-                        emit('    iload ' +  str(symbol_table.index((None if localctx._NAME is None else localctx._NAME.text))), +1)
+                        #Checar na proxima aula
+                        if (None if localctx._NAME is None else localctx._NAME.text) not in symbol_table:
+                            print('Variable ' + (None if localctx._NAME is None else localctx._NAME.text) + ' is not defined')
+                        else:
+                            emit('    iload ' +  str(symbol_table.index((None if localctx._NAME is None else localctx._NAME.text))), +1)
                     
                 pass
             elif token in [JacParser.READINT]:
                 self.enterOuterAlt(localctx, 4)
-                self.state = 129
+                self.state = 132
                 self.match(JacParser.READINT)
-                self.state = 130
+                self.state = 133
                 self.match(JacParser.OP_PAR)
-                self.state = 131
+                self.state = 134
                 self.match(JacParser.CL_PAR)
                 if 1:
                         emit('    invokestatic Runtime/readInt()I', +1)

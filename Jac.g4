@@ -1,5 +1,31 @@
 grammar Jac;
 
+/*---------------- LEXER INTERNALS ----------------*/
+@lexer::header
+{
+from antlr_denter.DenterHelper import DenterHelper
+from JacParser import JacParser
+}
+
+@lexer::members
+{
+class JacDenter(DenterHelper):
+    def __init__(self, lexer, nl_token, indent_token, dedent_token, ignore_eof):
+        super().__init__(nl_token, indent_token, dedent_token, ignore_eof)
+        self.lexer: JacLexer = lexer
+
+    def pull_token(self):
+        return super(JacLexer, self.lexer).nextToken()
+
+denter = None
+
+def nextToken(self):
+    if not self.denter:
+        self.denter = self.JacDenter(self, self.NL, JacParser.INDENT, JacParser.DEDENT, False)
+    return self.denter.next_token()
+}
+
+
 /*---------------- PARSER INTERNALS ----------------*/
 
 @parser::header
@@ -27,6 +53,8 @@ def if_counter():
 
 /*---------------- LEXER RULES ----------------*/
 
+tokens { INDENT, DEDENT }
+
 IF       : 'if'       ;
 WHILE    : 'while'    ;
 BREAK    : 'break'    ;
@@ -39,12 +67,14 @@ MINUS : '-' ;
 TIMES : '*' ;
 OVER  : '/' ;
 REM   : '%' ;
+COLON : ':' ;
 
 OP_PAR : '(' ;
 CL_PAR : ')' ;
-OP_CUR : '{' ; //curly brackets
-CL_CUR : '}' ;
+OP_CUR : '{' ; //curly bracket1
+CL_CUR : '}' ; //curly bracket2
 ATTRIB : '=' ;
+
 COMMA  : ',' ;
 
 EQ     : '==' ;
@@ -58,9 +88,9 @@ NAME: 'a'..'z'+ ;
 
 NUMBER: '0'..'9'+ ;
 
-SPACE: (' '|'\t'|'\r'|'\n')+ -> skip ;
-
-COMMENT: '#' ~('\n')*        -> skip ;
+COMMENT: '#' ~('\n')* -> skip ;
+NL: ('\r'? '\n' ' '*);
+SPACE: (' '|'\t')+ -> skip ;
 
 /*---------------- PARSER RULES ----------------*/
 
@@ -93,7 +123,7 @@ main:
     }
     ;
 
-statement: st_print | st_attrib | st_if | st_while
+statement: NL | st_print | st_attrib | st_if | st_while
     ;
 
 st_print:
@@ -135,7 +165,7 @@ st_if: IF comparison_if
         local_if = if_max
         if_max += 1
     }
-    OP_CUR ( statement )+ CL_CUR
+    COLON INDENT ( statement )+ DEDENT
     {if 1:
         print('NOT_IF_' + str(local_if) + ':')
         if_counter()
@@ -152,7 +182,7 @@ st_while: WHILE
     {if 1:
         while_max += 1
     }
-    OP_CUR ( statement )+ CL_CUR
+    COLON INDENT ( statement )+ DEDENT
     {if 1:
         emit('goto BEGIN_WHILE_' + str(local_while), 0)
         print('END_WHILE_' + str(local_while) + ':')
@@ -206,7 +236,7 @@ expression: term ( op = ( PLUS | MINUS ) term
 
 term: factor ( op = ( TIMES | OVER | REM ) factor
     {if 1:
-        if   $op.type == JacParser.TIMES:
+        if $op.type == JacParser.TIMES:
             emit('    imul', -1)
         elif $op.type == JacParser.OVER:
             emit('    idiv', -1)
@@ -223,7 +253,11 @@ factor: NUMBER
     | OP_PAR expression CL_PAR
     | NAME
     {if 1:
-        emit('    iload ' +  str(symbol_table.index($NAME.text)), +1)
+        #Checar na proxima aula
+        if $NAME.text not in symbol_table:
+            print('Variable ' + $NAME.text + ' is not defined')
+        else:
+            emit('    iload ' +  str(symbol_table.index($NAME.text)), +1)
     }
     | READINT OP_PAR CL_PAR
     {if 1:
