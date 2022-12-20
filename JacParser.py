@@ -11,6 +11,7 @@ else:
 
 import sys;
 symbol_table = []
+used_table = []
 
 stack_cur = 0 
 stack_max = 0
@@ -254,6 +255,8 @@ class JacParser ( Parser ):
                     print('.limit stack ' + str(stack_max))
                     print('.end method')
                     print('\n; symbol_table:', symbol_table)
+                    if (False in used_table):
+                        sys.stderr.write('Warning: unused variables: ' + str([symbol_table[i] for i in range(len(used_table)) if not used_table[i]]) + '\n')
                 
         except RecognitionException as re:
             localctx.exception = re
@@ -473,6 +476,7 @@ class JacParser ( Parser ):
             if 1:
                     if (None if localctx._NAME is None else localctx._NAME.text) not in symbol_table:
                         symbol_table.append((None if localctx._NAME is None else localctx._NAME.text))
+                        used_table.append(False)
                     emit('    istore ' +  str(symbol_table.index((None if localctx._NAME is None else localctx._NAME.text))), +1)
                 
         except RecognitionException as re:
@@ -1037,11 +1041,12 @@ class JacParser ( Parser ):
                 self.state = 130
                 localctx._NAME = self.match(JacParser.NAME)
                 if 1:
-                        #Checar na proxima aula
                         if (None if localctx._NAME is None else localctx._NAME.text) not in symbol_table:
-                            print('Variable ' + (None if localctx._NAME is None else localctx._NAME.text) + ' is not defined')
+                            sys.stderr.write('Variable ' + (None if localctx._NAME is None else localctx._NAME.text) + ' is not defined')
+                            sys.exit(1)
                         else:
                             emit('    iload ' +  str(symbol_table.index((None if localctx._NAME is None else localctx._NAME.text))), +1)
+                            used_table[symbol_table.index((None if localctx._NAME is None else localctx._NAME.text))] = True
                     
                 pass
             elif token in [JacParser.READINT]:

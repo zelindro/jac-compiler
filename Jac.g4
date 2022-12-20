@@ -32,6 +32,7 @@ def nextToken(self):
 {
 import sys;
 symbol_table = []
+used_table = []
 
 stack_cur = 0 
 stack_max = 0
@@ -120,6 +121,8 @@ main:
         print('.limit stack ' + str(stack_max))
         print('.end method')
         print('\n; symbol_table:', symbol_table)
+        if (False in used_table):
+            sys.stderr.write('Warning: unused variables: ' + str([symbol_table[i] for i in range(len(used_table)) if not used_table[i]]) + '\n')
     }
     ;
 
@@ -155,6 +158,7 @@ st_attrib: NAME ATTRIB expression
     {if 1:
         if $NAME.text not in symbol_table:
             symbol_table.append($NAME.text)
+            used_table.append(False)
         emit('    istore ' +  str(symbol_table.index($NAME.text)), +1)
     }
     ;
@@ -253,11 +257,12 @@ factor: NUMBER
     | OP_PAR expression CL_PAR
     | NAME
     {if 1:
-        #Checar na proxima aula
         if $NAME.text not in symbol_table:
-            print('Variable ' + $NAME.text + ' is not defined')
+            sys.stderr.write('Variable ' + $NAME.text + ' is not defined')
+            sys.exit(1)
         else:
             emit('    iload ' +  str(symbol_table.index($NAME.text)), +1)
+            used_table[symbol_table.index($NAME.text)] = True
     }
     | READINT OP_PAR CL_PAR
     {if 1:
