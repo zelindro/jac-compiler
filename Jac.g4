@@ -72,8 +72,6 @@ COLON : ':' ;
 
 OP_PAR : '(' ;
 CL_PAR : ')' ;
-OP_CUR : '{' ; //curly bracket1
-CL_CUR : '}' ; //curly bracket2
 ATTRIB : '=' ;
 
 COMMA  : ',' ;
