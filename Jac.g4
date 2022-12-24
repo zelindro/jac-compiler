@@ -84,7 +84,6 @@ LT     : '<'  ;
 LE     : '<=' ;
 
 NAME: 'a'..'z'+ ;
-
 NUMBER: '0'..'9'+ ;
 
 COMMENT: '#' ~('\n')* -> skip ;
