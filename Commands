@@ -5,7 +5,7 @@ Raw commands:
 
 Run program with input file:
 
-  python compiler.py input.jac Test.j
+  python3 compiler.py input.jac Test.j
   java -jar jasmin-2.4.jar Test.j
   java Test
 

@@ -33,6 +33,7 @@ def nextToken(self):
 import sys;
 symbol_table = []
 used_table = []
+inside_while = []
 
 stack_cur = 0 
 stack_max = 0
@@ -62,6 +63,7 @@ BREAK    : 'break'    ;
 CONTINUE : 'continue' ;
 PRINT    : 'print'    ;
 READINT  : 'readint'  ;
+READSTR  : 'readstr'  ;
 
 PLUS  : '+' ;
 MINUS : '-' ;
@@ -83,12 +85,13 @@ GE     : '>=' ;
 LT     : '<'  ;
 LE     : '<=' ;
 
-NAME: 'a'..'z'+ ;
-NUMBER: '0'..'9'+ ;
+NAME: 'a'..'z'+         ;
+NUMBER: '0'..'9'+       ;
+STRING: '"' ~('"')* '"' ;
 
 COMMENT: '#' ~('\n')* -> skip ;
-NL: ('\r'? '\n' ' '*);
-SPACE: (' '|'\t')+ -> skip ;
+NL: ('\r'? '\n' ' '*)         ;
+SPACE: (' '|'\t')+ -> skip    ;
 
 /*---------------- PARSER RULES ----------------*/
 
@@ -123,7 +126,7 @@ main:
     }
     ;
 
-statement: NL | st_print | st_attrib | st_if | st_while
+statement: NL | st_print | st_attrib | st_if | st_while | st_break | st_continue
     ;
 
 st_print:
@@ -177,7 +180,8 @@ st_while: WHILE
     {if 1:
         global while_max
         local_while = while_max
-        print('BEGIN_WHILE_' + str(local_while) + ':')  
+        print('BEGIN_WHILE_' + str(local_while) + ':')
+        inside_while.append(local_while)
     }
     comparison_while
     {if 1:
@@ -187,6 +191,25 @@ st_while: WHILE
     {if 1:
         emit('goto BEGIN_WHILE_' + str(local_while), 0)
         print('END_WHILE_' + str(local_while) + ':')
+        inside_while.pop()
+    }
+    ;
+
+st_break: BREAK
+    {if 1:
+        if len(inside_while) == 0:
+            sys.stderr.write('Error: break outside while\n')
+            exit(1)
+        emit('goto END_WHILE_' + str(while_max-1), 0)
+    }
+    ;
+
+st_continue: CONTINUE
+    {if 1:
+        if len(inside_while) == 0:
+            sys.stderr.write('Error: continue outside while\n')
+            exit(1)
+        emit('goto BEGIN_WHILE_' + str(while_max-1), 0)
     }
     ;
 

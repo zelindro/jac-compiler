@@ -1,6 +1,10 @@
-a = 2
-if a == 3:
-  print(1)
+n = 0
 
-if a != 3:
-  print(2)
+while n < 5: 
+    n = n + 1
+    if n == 2:
+        continue
+    if n == 5:
+        break
+    print(n)
+print(72)
