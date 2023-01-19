@@ -2,24 +2,18 @@
 
 x = 77
 y = 88
-if x == y {
+if x == y:
     print(1)
-}
-if x != y {
+if x != y:
     print(2)
-}
 x = 88
-if x < y {
+if x < y:
     print(3)
-}
-if x <= y {
+if x <= y:
     print(4)
-}
-if x > y {
+if x > y:
     print(5)
-}
 y = 77
-if x >= y {
+if x >= y:
     print(6)
-}
 

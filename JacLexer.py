@@ -60,8 +60,8 @@ def serializedATN():
         buf.write("\7v\2\2b\16\3\2\2\2cd\7t\2\2de\7g\2\2ef\7c\2\2fg\7f\2")
         buf.write("\2gh\7u\2\2hi\7v\2\2ij\7t\2\2j\20\3\2\2\2kl\7-\2\2l\22")
         buf.write("\3\2\2\2mn\7/\2\2n\24\3\2\2\2op\7,\2\2p\26\3\2\2\2qr\7")
-        buf.write("\61\2\2r\30\3\2\2\2st\7\'\2\2t\32\3\2\2\2uv\7<\2\2v\34")
-        buf.write("\3\2\2\2wx\7*\2\2x\36\3\2\2\2yz\7+\2\2z \3\2\2\2{|\7?")
+        buf.write("\61\2\2r\30\3\2\2\2st\7\'\2\2t\32\3\2\2\2uv\7*\2\2v\34")
+        buf.write("\3\2\2\2wx\7+\2\2x\36\3\2\2\2yz\7?\2\2z \3\2\2\2{|\7<")
         buf.write("\2\2|\"\3\2\2\2}~\7.\2\2~$\3\2\2\2\177\u0080\7?\2\2\u0080")
         buf.write("\u0081\7?\2\2\u0081&\3\2\2\2\u0082\u0083\7#\2\2\u0083")
         buf.write("\u0084\7?\2\2\u0084(\3\2\2\2\u0085\u0086\7@\2\2\u0086")
@@ -109,10 +109,10 @@ class JacLexer(Lexer):
     TIMES = 10
     OVER = 11
     REM = 12
-    COLON = 13
-    OP_PAR = 14
-    CL_PAR = 15
-    ATTRIB = 16
+    OP_PAR = 13
+    CL_PAR = 14
+    ATTRIB = 15
+    COLON = 16
     COMMA = 17
     EQ = 18
     NE = 19
@@ -133,18 +133,18 @@ class JacLexer(Lexer):
 
     literalNames = [ "<INVALID>",
             "'if'", "'while'", "'break'", "'continue'", "'print'", "'readint'", 
-            "'readstr'", "'+'", "'-'", "'*'", "'/'", "'%'", "':'", "'('", 
-            "')'", "'='", "','", "'=='", "'!='", "'>'", "'>='", "'<'", "'<='" ]
+            "'readstr'", "'+'", "'-'", "'*'", "'/'", "'%'", "'('", "')'", 
+            "'='", "':'", "','", "'=='", "'!='", "'>'", "'>='", "'<'", "'<='" ]
 
     symbolicNames = [ "<INVALID>",
             "IF", "WHILE", "BREAK", "CONTINUE", "PRINT", "READINT", "READSTR", 
-            "PLUS", "MINUS", "TIMES", "OVER", "REM", "COLON", "OP_PAR", 
-            "CL_PAR", "ATTRIB", "COMMA", "EQ", "NE", "GT", "GE", "LT", "LE", 
+            "PLUS", "MINUS", "TIMES", "OVER", "REM", "OP_PAR", "CL_PAR", 
+            "ATTRIB", "COLON", "COMMA", "EQ", "NE", "GT", "GE", "LT", "LE", 
             "NAME", "NUMBER", "STRING", "COMMENT", "NL", "SPACE" ]
 
     ruleNames = [ "IF", "WHILE", "BREAK", "CONTINUE", "PRINT", "READINT", 
-                  "READSTR", "PLUS", "MINUS", "TIMES", "OVER", "REM", "COLON", 
-                  "OP_PAR", "CL_PAR", "ATTRIB", "COMMA", "EQ", "NE", "GT", 
+                  "READSTR", "PLUS", "MINUS", "TIMES", "OVER", "REM", "OP_PAR", 
+                  "CL_PAR", "ATTRIB", "COLON", "COMMA", "EQ", "NE", "GT", 
                   "GE", "LT", "LE", "NAME", "NUMBER", "STRING", "COMMENT", 
                   "NL", "SPACE" ]
 

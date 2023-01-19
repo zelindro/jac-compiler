@@ -21,7 +21,7 @@ public class JacLexer extends Lexer {
 		new PredictionContextCache();
 	public static final int
 		IF=1, WHILE=2, BREAK=3, CONTINUE=4, PRINT=5, READINT=6, READSTR=7, PLUS=8, 
-		MINUS=9, TIMES=10, OVER=11, REM=12, COLON=13, OP_PAR=14, CL_PAR=15, ATTRIB=16, 
+		MINUS=9, TIMES=10, OVER=11, REM=12, OP_PAR=13, CL_PAR=14, ATTRIB=15, COLON=16, 
 		COMMA=17, EQ=18, NE=19, GT=20, GE=21, LT=22, LE=23, NAME=24, NUMBER=25, 
 		STRING=26, COMMENT=27, NL=28, SPACE=29;
 	public static String[] channelNames = {
@@ -35,7 +35,7 @@ public class JacLexer extends Lexer {
 	private static String[] makeRuleNames() {
 		return new String[] {
 			"IF", "WHILE", "BREAK", "CONTINUE", "PRINT", "READINT", "READSTR", "PLUS", 
-			"MINUS", "TIMES", "OVER", "REM", "COLON", "OP_PAR", "CL_PAR", "ATTRIB", 
+			"MINUS", "TIMES", "OVER", "REM", "OP_PAR", "CL_PAR", "ATTRIB", "COLON", 
 			"COMMA", "EQ", "NE", "GT", "GE", "LT", "LE", "NAME", "NUMBER", "STRING", 
 			"COMMENT", "NL", "SPACE"
 		};
@@ -45,16 +45,16 @@ public class JacLexer extends Lexer {
 	private static String[] makeLiteralNames() {
 		return new String[] {
 			null, "'if'", "'while'", "'break'", "'continue'", "'print'", "'readint'", 
-			"'readstr'", "'+'", "'-'", "'*'", "'/'", "'%'", "':'", "'('", "')'", 
-			"'='", "','", "'=='", "'!='", "'>'", "'>='", "'<'", "'<='"
+			"'readstr'", "'+'", "'-'", "'*'", "'/'", "'%'", "'('", "')'", "'='", 
+			"':'", "','", "'=='", "'!='", "'>'", "'>='", "'<'", "'<='"
 		};
 	}
 	private static final String[] _LITERAL_NAMES = makeLiteralNames();
 	private static String[] makeSymbolicNames() {
 		return new String[] {
 			null, "IF", "WHILE", "BREAK", "CONTINUE", "PRINT", "READINT", "READSTR", 
-			"PLUS", "MINUS", "TIMES", "OVER", "REM", "COLON", "OP_PAR", "CL_PAR", 
-			"ATTRIB", "COMMA", "EQ", "NE", "GT", "GE", "LT", "LE", "NAME", "NUMBER", 
+			"PLUS", "MINUS", "TIMES", "OVER", "REM", "OP_PAR", "CL_PAR", "ATTRIB", 
+			"COLON", "COMMA", "EQ", "NE", "GT", "GE", "LT", "LE", "NAME", "NUMBER", 
 			"STRING", "COMMENT", "NL", "SPACE"
 		};
 	}
@@ -168,8 +168,8 @@ public class JacLexer extends Lexer {
 		"\2]^\7c\2\2^_\7f\2\2_`\7k\2\2`a\7p\2\2ab\7v\2\2b\16\3\2\2\2cd\7t\2\2d"+
 		"e\7g\2\2ef\7c\2\2fg\7f\2\2gh\7u\2\2hi\7v\2\2ij\7t\2\2j\20\3\2\2\2kl\7"+
 		"-\2\2l\22\3\2\2\2mn\7/\2\2n\24\3\2\2\2op\7,\2\2p\26\3\2\2\2qr\7\61\2\2"+
-		"r\30\3\2\2\2st\7\'\2\2t\32\3\2\2\2uv\7<\2\2v\34\3\2\2\2wx\7*\2\2x\36\3"+
-		"\2\2\2yz\7+\2\2z \3\2\2\2{|\7?\2\2|\"\3\2\2\2}~\7.\2\2~$\3\2\2\2\177\u0080"+
+		"r\30\3\2\2\2st\7\'\2\2t\32\3\2\2\2uv\7*\2\2v\34\3\2\2\2wx\7+\2\2x\36\3"+
+		"\2\2\2yz\7?\2\2z \3\2\2\2{|\7<\2\2|\"\3\2\2\2}~\7.\2\2~$\3\2\2\2\177\u0080"+
 		"\7?\2\2\u0080\u0081\7?\2\2\u0081&\3\2\2\2\u0082\u0083\7#\2\2\u0083\u0084"+
 		"\7?\2\2\u0084(\3\2\2\2\u0085\u0086\7@\2\2\u0086*\3\2\2\2\u0087\u0088\7"+
 		"@\2\2\u0088\u0089\7?\2\2\u0089,\3\2\2\2\u008a\u008b\7>\2\2\u008b.\3\2"+
