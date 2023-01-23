@@ -4,6 +4,7 @@ import sys;
 symbol_table = []
 symbol_type = []
 used_table = []
+declare_table = []
 inside_while = []
 
 stack_cur = 0 
@@ -22,6 +23,14 @@ def if_counter():
     global if_max
     if_max += 1
 
+def reset_counters():
+    global stack_max, symbol_table, symbol_type, used_table
+    stack_max = 0
+    symbol_table = []
+    symbol_type = []
+    used_table = []
+
+
 import org.antlr.v4.runtime.atn.*;
 import org.antlr.v4.runtime.dfa.DFA;
 import org.antlr.v4.runtime.*;
@@ -39,20 +48,20 @@ public class JacParser extends Parser {
 	protected static final PredictionContextCache _sharedContextCache =
 		new PredictionContextCache();
 	public static final int
-		IF=1, WHILE=2, BREAK=3, CONTINUE=4, PRINT=5, READINT=6, READSTR=7, PLUS=8, 
-		MINUS=9, TIMES=10, OVER=11, REM=12, OP_PAR=13, CL_PAR=14, ATTRIB=15, COLON=16, 
-		COMMA=17, EQ=18, NE=19, GT=20, GE=21, LT=22, LE=23, NAME=24, NUMBER=25, 
-		STRING=26, COMMENT=27, NL=28, SPACE=29, INDENT=30, DEDENT=31;
+		IF=1, WHILE=2, BREAK=3, CONTINUE=4, PRINT=5, READINT=6, READSTR=7, DEF=8, 
+		PLUS=9, MINUS=10, TIMES=11, OVER=12, REM=13, OP_PAR=14, CL_PAR=15, ATTRIB=16, 
+		COLON=17, COMMA=18, EQ=19, NE=20, GT=21, GE=22, LT=23, LE=24, NAME=25, 
+		NUMBER=26, STRING=27, COMMENT=28, NL=29, SPACE=30, INDENT=31, DEDENT=32;
 	public static final int
-		RULE_program = 0, RULE_main = 1, RULE_statement = 2, RULE_st_print = 3, 
-		RULE_st_attrib = 4, RULE_st_if = 5, RULE_st_while = 6, RULE_st_break = 7, 
-		RULE_st_continue = 8, RULE_comparison_if = 9, RULE_comparison_while = 10, 
-		RULE_expression = 11, RULE_term = 12, RULE_factor = 13;
+		RULE_program = 0, RULE_main = 1, RULE_function = 2, RULE_statement = 3, 
+		RULE_st_print = 4, RULE_st_attrib = 5, RULE_st_if = 6, RULE_st_while = 7, 
+		RULE_st_break = 8, RULE_st_continue = 9, RULE_st_call = 10, RULE_comparison_if = 11, 
+		RULE_comparison_while = 12, RULE_expression = 13, RULE_term = 14, RULE_factor = 15;
 	private static String[] makeRuleNames() {
 		return new String[] {
-			"program", "main", "statement", "st_print", "st_attrib", "st_if", "st_while", 
-			"st_break", "st_continue", "comparison_if", "comparison_while", "expression", 
-			"term", "factor"
+			"program", "main", "function", "statement", "st_print", "st_attrib", 
+			"st_if", "st_while", "st_break", "st_continue", "st_call", "comparison_if", 
+			"comparison_while", "expression", "term", "factor"
 		};
 	}
 	public static final String[] ruleNames = makeRuleNames();
@@ -60,15 +69,15 @@ public class JacParser extends Parser {
 	private static String[] makeLiteralNames() {
 		return new String[] {
 			null, "'if'", "'while'", "'break'", "'continue'", "'print'", "'readint'", 
-			"'readstr'", "'+'", "'-'", "'*'", "'/'", "'%'", "'('", "')'", "'='", 
-			"':'", "','", "'=='", "'!='", "'>'", "'>='", "'<'", "'<='"
+			"'readstr'", "'def'", "'+'", "'-'", "'*'", "'/'", "'%'", "'('", "')'", 
+			"'='", "':'", "','", "'=='", "'!='", "'>'", "'>='", "'<'", "'<='"
 		};
 	}
 	private static final String[] _LITERAL_NAMES = makeLiteralNames();
 	private static String[] makeSymbolicNames() {
 		return new String[] {
 			null, "IF", "WHILE", "BREAK", "CONTINUE", "PRINT", "READINT", "READSTR", 
-			"PLUS", "MINUS", "TIMES", "OVER", "REM", "OP_PAR", "CL_PAR", "ATTRIB", 
+			"DEF", "PLUS", "MINUS", "TIMES", "OVER", "REM", "OP_PAR", "CL_PAR", "ATTRIB", 
 			"COLON", "COMMA", "EQ", "NE", "GT", "GE", "LT", "LE", "NAME", "NUMBER", 
 			"STRING", "COMMENT", "NL", "SPACE", "INDENT", "DEDENT"
 		};
@@ -128,6 +137,12 @@ public class JacParser extends Parser {
 		public MainContext main() {
 			return getRuleContext(MainContext.class,0);
 		}
+		public List<FunctionContext> function() {
+			return getRuleContexts(FunctionContext.class);
+		}
+		public FunctionContext function(int i) {
+			return getRuleContext(FunctionContext.class,i);
+		}
 		public ProgramContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
@@ -137,6 +152,7 @@ public class JacParser extends Parser {
 	public final ProgramContext program() throws RecognitionException {
 		ProgramContext _localctx = new ProgramContext(_ctx, getState());
 		enterRule(_localctx, 0, RULE_program);
+		int _la;
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
@@ -150,7 +166,21 @@ public class JacParser extends Parser {
 			        print('    return')
 			        print('.end method\n')
 			    
-			setState(29);
+			setState(36);
+			_errHandler.sync(this);
+			_la = _input.LA(1);
+			while (_la==DEF) {
+				{
+				{
+				setState(33);
+				function();
+				}
+				}
+				setState(38);
+				_errHandler.sync(this);
+				_la = _input.LA(1);
+			}
+			setState(39);
 			main();
 			}
 		}
@@ -188,17 +218,17 @@ public class JacParser extends Parser {
 			if 1:
 			        print('.method public static main([Ljava/lang/String;)V\n')
 			    
-			setState(33); 
+			setState(43); 
 			_errHandler.sync(this);
 			_la = _input.LA(1);
 			do {
 				{
 				{
-				setState(32);
+				setState(42);
 				statement();
 				}
 				}
-				setState(35); 
+				setState(45); 
 				_errHandler.sync(this);
 				_la = _input.LA(1);
 			} while ( (((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << IF) | (1L << WHILE) | (1L << BREAK) | (1L << CONTINUE) | (1L << PRINT) | (1L << NAME) | (1L << NL))) != 0) );
@@ -227,7 +257,96 @@ public class JacParser extends Parser {
 		return _localctx;
 	}
 
+	public static class FunctionContext extends ParserRuleContext {
+		public Token NAME;
+		public TerminalNode DEF() { return getToken(JacParser.DEF, 0); }
+		public TerminalNode NAME() { return getToken(JacParser.NAME, 0); }
+		public TerminalNode OP_PAR() { return getToken(JacParser.OP_PAR, 0); }
+		public TerminalNode CL_PAR() { return getToken(JacParser.CL_PAR, 0); }
+		public TerminalNode COLON() { return getToken(JacParser.COLON, 0); }
+		public TerminalNode INDENT() { return getToken(JacParser.INDENT, 0); }
+		public TerminalNode DEDENT() { return getToken(JacParser.DEDENT, 0); }
+		public List<StatementContext> statement() {
+			return getRuleContexts(StatementContext.class);
+		}
+		public StatementContext statement(int i) {
+			return getRuleContext(StatementContext.class,i);
+		}
+		public FunctionContext(ParserRuleContext parent, int invokingState) {
+			super(parent, invokingState);
+		}
+		@Override public int getRuleIndex() { return RULE_function; }
+	}
+
+	public final FunctionContext function() throws RecognitionException {
+		FunctionContext _localctx = new FunctionContext(_ctx, getState());
+		enterRule(_localctx, 4, RULE_function);
+		int _la;
+		try {
+			enterOuterAlt(_localctx, 1);
+			{
+			setState(49);
+			match(DEF);
+			setState(50);
+			((FunctionContext)_localctx).NAME = match(NAME);
+			setState(51);
+			match(OP_PAR);
+			setState(52);
+			match(CL_PAR);
+			setState(53);
+			match(COLON);
+			if 1:
+			        if (((FunctionContext)_localctx).NAME!=null?((FunctionContext)_localctx).NAME.getText():null) not in declare_table:
+			            declare_table.append((((FunctionContext)_localctx).NAME!=null?((FunctionContext)_localctx).NAME.getText():null))
+			        else:
+			            sys.stderr.write('Error: function ' + (((FunctionContext)_localctx).NAME!=null?((FunctionContext)_localctx).NAME.getText():null) + ' already declared\n')
+			            exit(1)
+			        
+			        print('.method public static ' + (((FunctionContext)_localctx).NAME!=null?((FunctionContext)_localctx).NAME.getText():null) + '()V')
+			    
+			setState(55);
+			match(INDENT);
+			setState(59);
+			_errHandler.sync(this);
+			_la = _input.LA(1);
+			while ((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << IF) | (1L << WHILE) | (1L << BREAK) | (1L << CONTINUE) | (1L << PRINT) | (1L << NAME) | (1L << NL))) != 0)) {
+				{
+				{
+				setState(56);
+				statement();
+				}
+				}
+				setState(61);
+				_errHandler.sync(this);
+				_la = _input.LA(1);
+			}
+			setState(62);
+			match(DEDENT);
+			if 1:
+			        print('    return')
+			        if (len(symbol_table) > 0):
+			            print('    .limit locals ' + str(len(symbol_table)))
+			        print('    .limit stack ' + str(stack_max))
+			        print('.end method')    
+			        reset_counters()
+			    
+			}
+		}
+		catch (RecognitionException re) {
+			_localctx.exception = re;
+			_errHandler.reportError(this, re);
+			_errHandler.recover(this, re);
+		}
+		finally {
+			exitRule();
+		}
+		return _localctx;
+	}
+
 	public static class StatementContext extends ParserRuleContext {
+		public St_callContext st_call() {
+			return getRuleContext(St_callContext.class,0);
+		}
 		public TerminalNode NL() { return getToken(JacParser.NL, 0); }
 		public St_printContext st_print() {
 			return getRuleContext(St_printContext.class,0);
@@ -255,62 +374,67 @@ public class JacParser extends Parser {
 
 	public final StatementContext statement() throws RecognitionException {
 		StatementContext _localctx = new StatementContext(_ctx, getState());
-		enterRule(_localctx, 4, RULE_statement);
+		enterRule(_localctx, 6, RULE_statement);
 		try {
-			setState(46);
+			setState(73);
 			_errHandler.sync(this);
-			switch (_input.LA(1)) {
-			case NL:
+			switch ( getInterpreter().adaptivePredict(_input,3,_ctx) ) {
+			case 1:
 				enterOuterAlt(_localctx, 1);
 				{
-				setState(39);
+				setState(65);
+				st_call();
+				}
+				break;
+			case 2:
+				enterOuterAlt(_localctx, 2);
+				{
+				setState(66);
 				match(NL);
 				}
 				break;
-			case PRINT:
-				enterOuterAlt(_localctx, 2);
+			case 3:
+				enterOuterAlt(_localctx, 3);
 				{
-				setState(40);
+				setState(67);
 				st_print();
 				}
 				break;
-			case NAME:
-				enterOuterAlt(_localctx, 3);
+			case 4:
+				enterOuterAlt(_localctx, 4);
 				{
-				setState(41);
+				setState(68);
 				st_attrib();
 				}
 				break;
-			case IF:
-				enterOuterAlt(_localctx, 4);
+			case 5:
+				enterOuterAlt(_localctx, 5);
 				{
-				setState(42);
+				setState(69);
 				st_if();
 				}
 				break;
-			case WHILE:
-				enterOuterAlt(_localctx, 5);
+			case 6:
+				enterOuterAlt(_localctx, 6);
 				{
-				setState(43);
+				setState(70);
 				st_while();
 				}
 				break;
-			case BREAK:
-				enterOuterAlt(_localctx, 6);
+			case 7:
+				enterOuterAlt(_localctx, 7);
 				{
-				setState(44);
+				setState(71);
 				st_break();
 				}
 				break;
-			case CONTINUE:
-				enterOuterAlt(_localctx, 7);
+			case 8:
+				enterOuterAlt(_localctx, 8);
 				{
-				setState(45);
+				setState(72);
 				st_continue();
 				}
 				break;
-			default:
-				throw new NoViableAltException(this);
 			}
 		}
 		catch (RecognitionException re) {
@@ -348,16 +472,16 @@ public class JacParser extends Parser {
 
 	public final St_printContext st_print() throws RecognitionException {
 		St_printContext _localctx = new St_printContext(_ctx, getState());
-		enterRule(_localctx, 6, RULE_st_print);
+		enterRule(_localctx, 8, RULE_st_print);
 		int _la;
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(48);
+			setState(75);
 			match(PRINT);
-			setState(49);
+			setState(76);
 			match(OP_PAR);
-			setState(63);
+			setState(90);
 			_errHandler.sync(this);
 			_la = _input.LA(1);
 			if ((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << READINT) | (1L << READSTR) | (1L << OP_PAR) | (1L << NAME) | (1L << NUMBER) | (1L << STRING))) != 0)) {
@@ -365,7 +489,7 @@ public class JacParser extends Parser {
 				if 1:
 				        emit('    getstatic java/lang/System/out Ljava/io/PrintStream;', +1)
 				    
-				setState(51);
+				setState(78);
 				((St_printContext)_localctx).e1 = expression();
 				if 1:
 				        if ((St_printContext)_localctx).e1.type == 'i':
@@ -376,32 +500,38 @@ public class JacParser extends Parser {
 				            sys.stderr.write('**HELP**\n')
 				            exit(1)
 				    
-				setState(60);
+				setState(87);
 				_errHandler.sync(this);
 				_la = _input.LA(1);
 				while (_la==COMMA) {
 					{
 					{
-					setState(53);
+					setState(80);
 					match(COMMA);
 					if 1:
 					        emit('    getstatic java/lang/System/out Ljava/io/PrintStream;', +1)
 					    
-					setState(55);
+					setState(82);
 					((St_printContext)_localctx).e2 = expression();
 					if 1:
-					        emit('    invokevirtual java/io/PrintStream/print(I)V\n', -2)
+					        if ((St_printContext)_localctx).e2.type == 'i':
+					            emit('    invokevirtual java/io/PrintStream/print(I)V\n', -2)
+					        elif ((St_printContext)_localctx).e2.type == 's':
+					            emit('    invokevirtual java/io/PrintStream/print(Ljava/lang/String;)V\n', -2)
+					        else:
+					            sys.stderr.write('**HELP**\n')
+					            exit(1)
 					    
 					}
 					}
-					setState(62);
+					setState(89);
 					_errHandler.sync(this);
 					_la = _input.LA(1);
 				}
 				}
 			}
 
-			setState(65);
+			setState(92);
 			match(CL_PAR);
 			if 1:
 			        emit('    getstatic java/lang/System/out Ljava/io/PrintStream;', +1)
@@ -436,15 +566,15 @@ public class JacParser extends Parser {
 
 	public final St_attribContext st_attrib() throws RecognitionException {
 		St_attribContext _localctx = new St_attribContext(_ctx, getState());
-		enterRule(_localctx, 8, RULE_st_attrib);
+		enterRule(_localctx, 10, RULE_st_attrib);
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(68);
+			setState(95);
 			((St_attribContext)_localctx).NAME = match(NAME);
-			setState(69);
+			setState(96);
 			match(ATTRIB);
-			setState(70);
+			setState(97);
 			((St_attribContext)_localctx).expression = expression();
 			if 1:
 			        if (((St_attribContext)_localctx).NAME!=null?((St_attribContext)_localctx).NAME.getText():null) not in symbol_table:
@@ -495,16 +625,16 @@ public class JacParser extends Parser {
 
 	public final St_ifContext st_if() throws RecognitionException {
 		St_ifContext _localctx = new St_ifContext(_ctx, getState());
-		enterRule(_localctx, 10, RULE_st_if);
+		enterRule(_localctx, 12, RULE_st_if);
 		int _la;
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(73);
+			setState(100);
 			match(IF);
-			setState(74);
+			setState(101);
 			((St_ifContext)_localctx).cmp = comparison_if();
-			setState(75);
+			setState(102);
 			match(COLON);
 			if 1:
 			        global if_max
@@ -512,23 +642,23 @@ public class JacParser extends Parser {
 			        local_if = if_max
 			        if_max += 1
 			    
-			setState(77);
+			setState(104);
 			match(INDENT);
-			setState(79); 
+			setState(106); 
 			_errHandler.sync(this);
 			_la = _input.LA(1);
 			do {
 				{
 				{
-				setState(78);
+				setState(105);
 				statement();
 				}
 				}
-				setState(81); 
+				setState(108); 
 				_errHandler.sync(this);
 				_la = _input.LA(1);
 			} while ( (((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << IF) | (1L << WHILE) | (1L << BREAK) | (1L << CONTINUE) | (1L << PRINT) | (1L << NAME) | (1L << NL))) != 0) );
-			setState(83);
+			setState(110);
 			match(DEDENT);
 			if 1:
 			        print('NOT_IF_' + str(local_if) + ':')
@@ -569,12 +699,12 @@ public class JacParser extends Parser {
 
 	public final St_whileContext st_while() throws RecognitionException {
 		St_whileContext _localctx = new St_whileContext(_ctx, getState());
-		enterRule(_localctx, 12, RULE_st_while);
+		enterRule(_localctx, 14, RULE_st_while);
 		int _la;
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(86);
+			setState(113);
 			match(WHILE);
 			if 1:
 			        global while_max
@@ -582,30 +712,30 @@ public class JacParser extends Parser {
 			        print('BEGIN_WHILE_' + str(local_while) + ':')
 			        inside_while.append(local_while)
 			    
-			setState(88);
+			setState(115);
 			comparison_while();
-			setState(89);
+			setState(116);
 			match(COLON);
 			if 1:
 			        while_max += 1
 			    
-			setState(91);
+			setState(118);
 			match(INDENT);
-			setState(93); 
+			setState(120); 
 			_errHandler.sync(this);
 			_la = _input.LA(1);
 			do {
 				{
 				{
-				setState(92);
+				setState(119);
 				statement();
 				}
 				}
-				setState(95); 
+				setState(122); 
 				_errHandler.sync(this);
 				_la = _input.LA(1);
 			} while ( (((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << IF) | (1L << WHILE) | (1L << BREAK) | (1L << CONTINUE) | (1L << PRINT) | (1L << NAME) | (1L << NL))) != 0) );
-			setState(97);
+			setState(124);
 			match(DEDENT);
 			if 1:
 			        emit('goto BEGIN_WHILE_' + str(local_while), 0)
@@ -635,11 +765,11 @@ public class JacParser extends Parser {
 
 	public final St_breakContext st_break() throws RecognitionException {
 		St_breakContext _localctx = new St_breakContext(_ctx, getState());
-		enterRule(_localctx, 14, RULE_st_break);
+		enterRule(_localctx, 16, RULE_st_break);
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(100);
+			setState(127);
 			match(BREAK);
 			if 1:
 			        if len(inside_while) == 0:
@@ -670,17 +800,56 @@ public class JacParser extends Parser {
 
 	public final St_continueContext st_continue() throws RecognitionException {
 		St_continueContext _localctx = new St_continueContext(_ctx, getState());
-		enterRule(_localctx, 16, RULE_st_continue);
+		enterRule(_localctx, 18, RULE_st_continue);
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(103);
+			setState(130);
 			match(CONTINUE);
 			if 1:
 			        if len(inside_while) == 0:
 			            sys.stderr.write('Error: continue outside while\n')
 			            exit(1)
 			        emit('goto BEGIN_WHILE_' + str(while_max-1), 0)
+			    
+			}
+		}
+		catch (RecognitionException re) {
+			_localctx.exception = re;
+			_errHandler.reportError(this, re);
+			_errHandler.recover(this, re);
+		}
+		finally {
+			exitRule();
+		}
+		return _localctx;
+	}
+
+	public static class St_callContext extends ParserRuleContext {
+		public Token NAME;
+		public TerminalNode NAME() { return getToken(JacParser.NAME, 0); }
+		public TerminalNode OP_PAR() { return getToken(JacParser.OP_PAR, 0); }
+		public TerminalNode CL_PAR() { return getToken(JacParser.CL_PAR, 0); }
+		public St_callContext(ParserRuleContext parent, int invokingState) {
+			super(parent, invokingState);
+		}
+		@Override public int getRuleIndex() { return RULE_st_call; }
+	}
+
+	public final St_callContext st_call() throws RecognitionException {
+		St_callContext _localctx = new St_callContext(_ctx, getState());
+		enterRule(_localctx, 20, RULE_st_call);
+		try {
+			enterOuterAlt(_localctx, 1);
+			{
+			setState(133);
+			((St_callContext)_localctx).NAME = match(NAME);
+			setState(134);
+			match(OP_PAR);
+			setState(135);
+			match(CL_PAR);
+			if 1:
+			        emit('invokestatic Test/' + (((St_callContext)_localctx).NAME!=null?((St_callContext)_localctx).NAME.getText():null) + '()V', 0)
 			    
 			}
 		}
@@ -718,14 +887,14 @@ public class JacParser extends Parser {
 
 	public final Comparison_ifContext comparison_if() throws RecognitionException {
 		Comparison_ifContext _localctx = new Comparison_ifContext(_ctx, getState());
-		enterRule(_localctx, 18, RULE_comparison_if);
+		enterRule(_localctx, 22, RULE_comparison_if);
 		int _la;
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(106);
+			setState(138);
 			expression();
-			setState(107);
+			setState(139);
 			((Comparison_ifContext)_localctx).op = _input.LT(1);
 			_la = _input.LA(1);
 			if ( !((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << EQ) | (1L << NE) | (1L << GT) | (1L << GE) | (1L << LT) | (1L << LE))) != 0)) ) {
@@ -736,7 +905,7 @@ public class JacParser extends Parser {
 				_errHandler.reportMatch(this);
 				consume();
 			}
-			setState(108);
+			setState(140);
 			expression();
 			if 1:
 			        if (((Comparison_ifContext)_localctx).op!=null?((Comparison_ifContext)_localctx).op.getType():0) == JacParser.EQ:
@@ -787,14 +956,14 @@ public class JacParser extends Parser {
 
 	public final Comparison_whileContext comparison_while() throws RecognitionException {
 		Comparison_whileContext _localctx = new Comparison_whileContext(_ctx, getState());
-		enterRule(_localctx, 20, RULE_comparison_while);
+		enterRule(_localctx, 24, RULE_comparison_while);
 		int _la;
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(111);
+			setState(143);
 			expression();
-			setState(112);
+			setState(144);
 			((Comparison_whileContext)_localctx).op = _input.LT(1);
 			_la = _input.LA(1);
 			if ( !((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << EQ) | (1L << NE) | (1L << GT) | (1L << GE) | (1L << LT) | (1L << LE))) != 0)) ) {
@@ -805,7 +974,7 @@ public class JacParser extends Parser {
 				_errHandler.reportMatch(this);
 				consume();
 			}
-			setState(113);
+			setState(145);
 			expression();
 			if 1:
 			        if (((Comparison_whileContext)_localctx).op!=null?((Comparison_whileContext)_localctx).op.getType():0) == JacParser.EQ:
@@ -861,20 +1030,20 @@ public class JacParser extends Parser {
 
 	public final ExpressionContext expression() throws RecognitionException {
 		ExpressionContext _localctx = new ExpressionContext(_ctx, getState());
-		enterRule(_localctx, 22, RULE_expression);
+		enterRule(_localctx, 26, RULE_expression);
 		int _la;
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(116);
+			setState(148);
 			((ExpressionContext)_localctx).t1 = term();
-			setState(123);
+			setState(155);
 			_errHandler.sync(this);
 			_la = _input.LA(1);
 			while (_la==PLUS || _la==MINUS) {
 				{
 				{
-				setState(117);
+				setState(149);
 				((ExpressionContext)_localctx).op = _input.LT(1);
 				_la = _input.LA(1);
 				if ( !(_la==PLUS || _la==MINUS) ) {
@@ -885,7 +1054,7 @@ public class JacParser extends Parser {
 					_errHandler.reportMatch(this);
 					consume();
 				}
-				setState(118);
+				setState(150);
 				((ExpressionContext)_localctx).t2 = term();
 				if 1:
 				        if (((ExpressionContext)_localctx).op!=null?((ExpressionContext)_localctx).op.getType():0) == JacParser.PLUS:
@@ -895,7 +1064,7 @@ public class JacParser extends Parser {
 				    
 				}
 				}
-				setState(125);
+				setState(157);
 				_errHandler.sync(this);
 				_la = _input.LA(1);
 			}
@@ -946,20 +1115,20 @@ public class JacParser extends Parser {
 
 	public final TermContext term() throws RecognitionException {
 		TermContext _localctx = new TermContext(_ctx, getState());
-		enterRule(_localctx, 24, RULE_term);
+		enterRule(_localctx, 28, RULE_term);
 		int _la;
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(128);
+			setState(160);
 			((TermContext)_localctx).f1 = factor();
-			setState(135);
+			setState(167);
 			_errHandler.sync(this);
 			_la = _input.LA(1);
 			while ((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << TIMES) | (1L << OVER) | (1L << REM))) != 0)) {
 				{
 				{
-				setState(129);
+				setState(161);
 				((TermContext)_localctx).op = _input.LT(1);
 				_la = _input.LA(1);
 				if ( !((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << TIMES) | (1L << OVER) | (1L << REM))) != 0)) ) {
@@ -970,7 +1139,7 @@ public class JacParser extends Parser {
 					_errHandler.reportMatch(this);
 					consume();
 				}
-				setState(130);
+				setState(162);
 				((TermContext)_localctx).f2 = factor();
 				if 1:
 				        if (((TermContext)_localctx).op!=null?((TermContext)_localctx).op.getType():0) == JacParser.TIMES:
@@ -982,7 +1151,7 @@ public class JacParser extends Parser {
 				    
 				}
 				}
-				setState(137);
+				setState(169);
 				_errHandler.sync(this);
 				_la = _input.LA(1);
 			}
@@ -1026,15 +1195,15 @@ public class JacParser extends Parser {
 
 	public final FactorContext factor() throws RecognitionException {
 		FactorContext _localctx = new FactorContext(_ctx, getState());
-		enterRule(_localctx, 26, RULE_factor);
+		enterRule(_localctx, 30, RULE_factor);
 		try {
-			setState(159);
+			setState(191);
 			_errHandler.sync(this);
 			switch (_input.LA(1)) {
 			case NUMBER:
 				enterOuterAlt(_localctx, 1);
 				{
-				setState(140);
+				setState(172);
 				((FactorContext)_localctx).NUMBER = match(NUMBER);
 				if 1:
 				        emit('    ldc ' + str((((FactorContext)_localctx).NUMBER!=null?((FactorContext)_localctx).NUMBER.getText():null)), +1)
@@ -1045,7 +1214,7 @@ public class JacParser extends Parser {
 			case STRING:
 				enterOuterAlt(_localctx, 2);
 				{
-				setState(142);
+				setState(174);
 				((FactorContext)_localctx).STRING = match(STRING);
 				if 1:
 				        emit('    ldc ' + str((((FactorContext)_localctx).STRING!=null?((FactorContext)_localctx).STRING.getText():null)), +1)
@@ -1056,11 +1225,11 @@ public class JacParser extends Parser {
 			case OP_PAR:
 				enterOuterAlt(_localctx, 3);
 				{
-				setState(144);
+				setState(176);
 				match(OP_PAR);
-				setState(145);
+				setState(177);
 				((FactorContext)_localctx).e = expression();
-				setState(146);
+				setState(178);
 				match(CL_PAR);
 				if 1:
 				        _localctx.type = ((FactorContext)_localctx).e.type
@@ -1070,7 +1239,7 @@ public class JacParser extends Parser {
 			case NAME:
 				enterOuterAlt(_localctx, 4);
 				{
-				setState(149);
+				setState(181);
 				((FactorContext)_localctx).NAME = match(NAME);
 				if 1:
 				        if (((FactorContext)_localctx).NAME!=null?((FactorContext)_localctx).NAME.getText():null) not in symbol_table:
@@ -1090,11 +1259,11 @@ public class JacParser extends Parser {
 			case READINT:
 				enterOuterAlt(_localctx, 5);
 				{
-				setState(151);
+				setState(183);
 				match(READINT);
-				setState(152);
+				setState(184);
 				match(OP_PAR);
-				setState(153);
+				setState(185);
 				match(CL_PAR);
 				if 1:
 				        emit('    invokestatic Runtime/readInt()I', +1)
@@ -1105,11 +1274,11 @@ public class JacParser extends Parser {
 			case READSTR:
 				enterOuterAlt(_localctx, 6);
 				{
-				setState(155);
+				setState(187);
 				match(READSTR);
-				setState(156);
+				setState(188);
 				match(OP_PAR);
-				setState(157);
+				setState(189);
 				match(CL_PAR);
 				if 1:
 				        emit('    invokestatic Runtime/readString()Ljava/lang/String;', +1)
@@ -1133,51 +1302,63 @@ public class JacParser extends Parser {
 	}
 
 	public static final String _serializedATN =
-		"\3\u608b\ua72a\u8133\ub9ed\u417c\u3be7\u7786\u5964\3!\u00a4\4\2\t\2\4"+
+		"\3\u608b\ua72a\u8133\ub9ed\u417c\u3be7\u7786\u5964\3\"\u00c4\4\2\t\2\4"+
 		"\3\t\3\4\4\t\4\4\5\t\5\4\6\t\6\4\7\t\7\4\b\t\b\4\t\t\t\4\n\t\n\4\13\t"+
-		"\13\4\f\t\f\4\r\t\r\4\16\t\16\4\17\t\17\3\2\3\2\3\2\3\3\3\3\6\3$\n\3\r"+
-		"\3\16\3%\3\3\3\3\3\4\3\4\3\4\3\4\3\4\3\4\3\4\5\4\61\n\4\3\5\3\5\3\5\3"+
-		"\5\3\5\3\5\3\5\3\5\3\5\3\5\7\5=\n\5\f\5\16\5@\13\5\5\5B\n\5\3\5\3\5\3"+
-		"\5\3\6\3\6\3\6\3\6\3\6\3\7\3\7\3\7\3\7\3\7\3\7\6\7R\n\7\r\7\16\7S\3\7"+
-		"\3\7\3\7\3\b\3\b\3\b\3\b\3\b\3\b\3\b\6\b`\n\b\r\b\16\ba\3\b\3\b\3\b\3"+
-		"\t\3\t\3\t\3\n\3\n\3\n\3\13\3\13\3\13\3\13\3\13\3\f\3\f\3\f\3\f\3\f\3"+
-		"\r\3\r\3\r\3\r\3\r\7\r|\n\r\f\r\16\r\177\13\r\3\r\3\r\3\16\3\16\3\16\3"+
-		"\16\3\16\7\16\u0088\n\16\f\16\16\16\u008b\13\16\3\16\3\16\3\17\3\17\3"+
-		"\17\3\17\3\17\3\17\3\17\3\17\3\17\3\17\3\17\3\17\3\17\3\17\3\17\3\17\3"+
-		"\17\3\17\3\17\5\17\u00a2\n\17\3\17\2\2\20\2\4\6\b\n\f\16\20\22\24\26\30"+
-		"\32\34\2\5\3\2\24\31\3\2\n\13\3\2\f\16\2\u00a7\2\36\3\2\2\2\4!\3\2\2\2"+
-		"\6\60\3\2\2\2\b\62\3\2\2\2\nF\3\2\2\2\fK\3\2\2\2\16X\3\2\2\2\20f\3\2\2"+
-		"\2\22i\3\2\2\2\24l\3\2\2\2\26q\3\2\2\2\30v\3\2\2\2\32\u0082\3\2\2\2\34"+
-		"\u00a1\3\2\2\2\36\37\b\2\1\2\37 \5\4\3\2 \3\3\2\2\2!#\b\3\1\2\"$\5\6\4"+
-		"\2#\"\3\2\2\2$%\3\2\2\2%#\3\2\2\2%&\3\2\2\2&\'\3\2\2\2\'(\b\3\1\2(\5\3"+
-		"\2\2\2)\61\7\36\2\2*\61\5\b\5\2+\61\5\n\6\2,\61\5\f\7\2-\61\5\16\b\2."+
-		"\61\5\20\t\2/\61\5\22\n\2\60)\3\2\2\2\60*\3\2\2\2\60+\3\2\2\2\60,\3\2"+
-		"\2\2\60-\3\2\2\2\60.\3\2\2\2\60/\3\2\2\2\61\7\3\2\2\2\62\63\7\7\2\2\63"+
-		"A\7\17\2\2\64\65\b\5\1\2\65\66\5\30\r\2\66>\b\5\1\2\678\7\23\2\289\b\5"+
-		"\1\29:\5\30\r\2:;\b\5\1\2;=\3\2\2\2<\67\3\2\2\2=@\3\2\2\2><\3\2\2\2>?"+
-		"\3\2\2\2?B\3\2\2\2@>\3\2\2\2A\64\3\2\2\2AB\3\2\2\2BC\3\2\2\2CD\7\20\2"+
-		"\2DE\b\5\1\2E\t\3\2\2\2FG\7\32\2\2GH\7\21\2\2HI\5\30\r\2IJ\b\6\1\2J\13"+
-		"\3\2\2\2KL\7\3\2\2LM\5\24\13\2MN\7\22\2\2NO\b\7\1\2OQ\7 \2\2PR\5\6\4\2"+
-		"QP\3\2\2\2RS\3\2\2\2SQ\3\2\2\2ST\3\2\2\2TU\3\2\2\2UV\7!\2\2VW\b\7\1\2"+
-		"W\r\3\2\2\2XY\7\4\2\2YZ\b\b\1\2Z[\5\26\f\2[\\\7\22\2\2\\]\b\b\1\2]_\7"+
-		" \2\2^`\5\6\4\2_^\3\2\2\2`a\3\2\2\2a_\3\2\2\2ab\3\2\2\2bc\3\2\2\2cd\7"+
-		"!\2\2de\b\b\1\2e\17\3\2\2\2fg\7\5\2\2gh\b\t\1\2h\21\3\2\2\2ij\7\6\2\2"+
-		"jk\b\n\1\2k\23\3\2\2\2lm\5\30\r\2mn\t\2\2\2no\5\30\r\2op\b\13\1\2p\25"+
-		"\3\2\2\2qr\5\30\r\2rs\t\2\2\2st\5\30\r\2tu\b\f\1\2u\27\3\2\2\2v}\5\32"+
-		"\16\2wx\t\3\2\2xy\5\32\16\2yz\b\r\1\2z|\3\2\2\2{w\3\2\2\2|\177\3\2\2\2"+
-		"}{\3\2\2\2}~\3\2\2\2~\u0080\3\2\2\2\177}\3\2\2\2\u0080\u0081\b\r\1\2\u0081"+
-		"\31\3\2\2\2\u0082\u0089\5\34\17\2\u0083\u0084\t\4\2\2\u0084\u0085\5\34"+
-		"\17\2\u0085\u0086\b\16\1\2\u0086\u0088\3\2\2\2\u0087\u0083\3\2\2\2\u0088"+
-		"\u008b\3\2\2\2\u0089\u0087\3\2\2\2\u0089\u008a\3\2\2\2\u008a\u008c\3\2"+
-		"\2\2\u008b\u0089\3\2\2\2\u008c\u008d\b\16\1\2\u008d\33\3\2\2\2\u008e\u008f"+
-		"\7\33\2\2\u008f\u00a2\b\17\1\2\u0090\u0091\7\34\2\2\u0091\u00a2\b\17\1"+
-		"\2\u0092\u0093\7\17\2\2\u0093\u0094\5\30\r\2\u0094\u0095\7\20\2\2\u0095"+
-		"\u0096\b\17\1\2\u0096\u00a2\3\2\2\2\u0097\u0098\7\32\2\2\u0098\u00a2\b"+
-		"\17\1\2\u0099\u009a\7\b\2\2\u009a\u009b\7\17\2\2\u009b\u009c\7\20\2\2"+
-		"\u009c\u00a2\b\17\1\2\u009d\u009e\7\t\2\2\u009e\u009f\7\17\2\2\u009f\u00a0"+
-		"\7\20\2\2\u00a0\u00a2\b\17\1\2\u00a1\u008e\3\2\2\2\u00a1\u0090\3\2\2\2"+
-		"\u00a1\u0092\3\2\2\2\u00a1\u0097\3\2\2\2\u00a1\u0099\3\2\2\2\u00a1\u009d"+
-		"\3\2\2\2\u00a2\35\3\2\2\2\13%\60>ASa}\u0089\u00a1";
+		"\13\4\f\t\f\4\r\t\r\4\16\t\16\4\17\t\17\4\20\t\20\4\21\t\21\3\2\3\2\7"+
+		"\2%\n\2\f\2\16\2(\13\2\3\2\3\2\3\3\3\3\6\3.\n\3\r\3\16\3/\3\3\3\3\3\4"+
+		"\3\4\3\4\3\4\3\4\3\4\3\4\3\4\7\4<\n\4\f\4\16\4?\13\4\3\4\3\4\3\4\3\5\3"+
+		"\5\3\5\3\5\3\5\3\5\3\5\3\5\5\5L\n\5\3\6\3\6\3\6\3\6\3\6\3\6\3\6\3\6\3"+
+		"\6\3\6\7\6X\n\6\f\6\16\6[\13\6\5\6]\n\6\3\6\3\6\3\6\3\7\3\7\3\7\3\7\3"+
+		"\7\3\b\3\b\3\b\3\b\3\b\3\b\6\bm\n\b\r\b\16\bn\3\b\3\b\3\b\3\t\3\t\3\t"+
+		"\3\t\3\t\3\t\3\t\6\t{\n\t\r\t\16\t|\3\t\3\t\3\t\3\n\3\n\3\n\3\13\3\13"+
+		"\3\13\3\f\3\f\3\f\3\f\3\f\3\r\3\r\3\r\3\r\3\r\3\16\3\16\3\16\3\16\3\16"+
+		"\3\17\3\17\3\17\3\17\3\17\7\17\u009c\n\17\f\17\16\17\u009f\13\17\3\17"+
+		"\3\17\3\20\3\20\3\20\3\20\3\20\7\20\u00a8\n\20\f\20\16\20\u00ab\13\20"+
+		"\3\20\3\20\3\21\3\21\3\21\3\21\3\21\3\21\3\21\3\21\3\21\3\21\3\21\3\21"+
+		"\3\21\3\21\3\21\3\21\3\21\3\21\3\21\5\21\u00c2\n\21\3\21\2\2\22\2\4\6"+
+		"\b\n\f\16\20\22\24\26\30\32\34\36 \2\5\3\2\25\32\3\2\13\f\3\2\r\17\2\u00c8"+
+		"\2\"\3\2\2\2\4+\3\2\2\2\6\63\3\2\2\2\bK\3\2\2\2\nM\3\2\2\2\fa\3\2\2\2"+
+		"\16f\3\2\2\2\20s\3\2\2\2\22\u0081\3\2\2\2\24\u0084\3\2\2\2\26\u0087\3"+
+		"\2\2\2\30\u008c\3\2\2\2\32\u0091\3\2\2\2\34\u0096\3\2\2\2\36\u00a2\3\2"+
+		"\2\2 \u00c1\3\2\2\2\"&\b\2\1\2#%\5\6\4\2$#\3\2\2\2%(\3\2\2\2&$\3\2\2\2"+
+		"&\'\3\2\2\2\')\3\2\2\2(&\3\2\2\2)*\5\4\3\2*\3\3\2\2\2+-\b\3\1\2,.\5\b"+
+		"\5\2-,\3\2\2\2./\3\2\2\2/-\3\2\2\2/\60\3\2\2\2\60\61\3\2\2\2\61\62\b\3"+
+		"\1\2\62\5\3\2\2\2\63\64\7\n\2\2\64\65\7\33\2\2\65\66\7\20\2\2\66\67\7"+
+		"\21\2\2\678\7\23\2\289\b\4\1\29=\7!\2\2:<\5\b\5\2;:\3\2\2\2<?\3\2\2\2"+
+		"=;\3\2\2\2=>\3\2\2\2>@\3\2\2\2?=\3\2\2\2@A\7\"\2\2AB\b\4\1\2B\7\3\2\2"+
+		"\2CL\5\26\f\2DL\7\37\2\2EL\5\n\6\2FL\5\f\7\2GL\5\16\b\2HL\5\20\t\2IL\5"+
+		"\22\n\2JL\5\24\13\2KC\3\2\2\2KD\3\2\2\2KE\3\2\2\2KF\3\2\2\2KG\3\2\2\2"+
+		"KH\3\2\2\2KI\3\2\2\2KJ\3\2\2\2L\t\3\2\2\2MN\7\7\2\2N\\\7\20\2\2OP\b\6"+
+		"\1\2PQ\5\34\17\2QY\b\6\1\2RS\7\24\2\2ST\b\6\1\2TU\5\34\17\2UV\b\6\1\2"+
+		"VX\3\2\2\2WR\3\2\2\2X[\3\2\2\2YW\3\2\2\2YZ\3\2\2\2Z]\3\2\2\2[Y\3\2\2\2"+
+		"\\O\3\2\2\2\\]\3\2\2\2]^\3\2\2\2^_\7\21\2\2_`\b\6\1\2`\13\3\2\2\2ab\7"+
+		"\33\2\2bc\7\22\2\2cd\5\34\17\2de\b\7\1\2e\r\3\2\2\2fg\7\3\2\2gh\5\30\r"+
+		"\2hi\7\23\2\2ij\b\b\1\2jl\7!\2\2km\5\b\5\2lk\3\2\2\2mn\3\2\2\2nl\3\2\2"+
+		"\2no\3\2\2\2op\3\2\2\2pq\7\"\2\2qr\b\b\1\2r\17\3\2\2\2st\7\4\2\2tu\b\t"+
+		"\1\2uv\5\32\16\2vw\7\23\2\2wx\b\t\1\2xz\7!\2\2y{\5\b\5\2zy\3\2\2\2{|\3"+
+		"\2\2\2|z\3\2\2\2|}\3\2\2\2}~\3\2\2\2~\177\7\"\2\2\177\u0080\b\t\1\2\u0080"+
+		"\21\3\2\2\2\u0081\u0082\7\5\2\2\u0082\u0083\b\n\1\2\u0083\23\3\2\2\2\u0084"+
+		"\u0085\7\6\2\2\u0085\u0086\b\13\1\2\u0086\25\3\2\2\2\u0087\u0088\7\33"+
+		"\2\2\u0088\u0089\7\20\2\2\u0089\u008a\7\21\2\2\u008a\u008b\b\f\1\2\u008b"+
+		"\27\3\2\2\2\u008c\u008d\5\34\17\2\u008d\u008e\t\2\2\2\u008e\u008f\5\34"+
+		"\17\2\u008f\u0090\b\r\1\2\u0090\31\3\2\2\2\u0091\u0092\5\34\17\2\u0092"+
+		"\u0093\t\2\2\2\u0093\u0094\5\34\17\2\u0094\u0095\b\16\1\2\u0095\33\3\2"+
+		"\2\2\u0096\u009d\5\36\20\2\u0097\u0098\t\3\2\2\u0098\u0099\5\36\20\2\u0099"+
+		"\u009a\b\17\1\2\u009a\u009c\3\2\2\2\u009b\u0097\3\2\2\2\u009c\u009f\3"+
+		"\2\2\2\u009d\u009b\3\2\2\2\u009d\u009e\3\2\2\2\u009e\u00a0\3\2\2\2\u009f"+
+		"\u009d\3\2\2\2\u00a0\u00a1\b\17\1\2\u00a1\35\3\2\2\2\u00a2\u00a9\5 \21"+
+		"\2\u00a3\u00a4\t\4\2\2\u00a4\u00a5\5 \21\2\u00a5\u00a6\b\20\1\2\u00a6"+
+		"\u00a8\3\2\2\2\u00a7\u00a3\3\2\2\2\u00a8\u00ab\3\2\2\2\u00a9\u00a7\3\2"+
+		"\2\2\u00a9\u00aa\3\2\2\2\u00aa\u00ac\3\2\2\2\u00ab\u00a9\3\2\2\2\u00ac"+
+		"\u00ad\b\20\1\2\u00ad\37\3\2\2\2\u00ae\u00af\7\34\2\2\u00af\u00c2\b\21"+
+		"\1\2\u00b0\u00b1\7\35\2\2\u00b1\u00c2\b\21\1\2\u00b2\u00b3\7\20\2\2\u00b3"+
+		"\u00b4\5\34\17\2\u00b4\u00b5\7\21\2\2\u00b5\u00b6\b\21\1\2\u00b6\u00c2"+
+		"\3\2\2\2\u00b7\u00b8\7\33\2\2\u00b8\u00c2\b\21\1\2\u00b9\u00ba\7\b\2\2"+
+		"\u00ba\u00bb\7\20\2\2\u00bb\u00bc\7\21\2\2\u00bc\u00c2\b\21\1\2\u00bd"+
+		"\u00be\7\t\2\2\u00be\u00bf\7\20\2\2\u00bf\u00c0\7\21\2\2\u00c0\u00c2\b"+
+		"\21\1\2\u00c1\u00ae\3\2\2\2\u00c1\u00b0\3\2\2\2\u00c1\u00b2\3\2\2\2\u00c1"+
+		"\u00b7\3\2\2\2\u00c1\u00b9\3\2\2\2\u00c1\u00bd\3\2\2\2\u00c2!\3\2\2\2"+
+		"\r&/=KY\\n|\u009d\u00a9\u00c1";
 	public static final ATN _ATN =
 		new ATNDeserializer().deserialize(_serializedATN.toCharArray());
 	static {

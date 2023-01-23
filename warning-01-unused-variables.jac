@@ -2,6 +2,7 @@
 
 a = 2
 b = a * 3
+c = 4
 print(a)
 
 # warning: 'b' is defined but never used

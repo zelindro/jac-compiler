@@ -15,4 +15,3 @@ def divisors():
 
 divisors()
 test()
-

@@ -33,6 +33,7 @@ import sys;
 symbol_table = []
 symbol_type = []
 used_table = []
+declare_table = []
 inside_while = []
 
 stack_cur = 0 
@@ -50,6 +51,14 @@ def emit(bytecode, delta):
 def if_counter():
     global if_max
     if_max += 1
+
+def reset_counters():
+    global stack_max, symbol_table, symbol_type, used_table
+    stack_max = 0
+    symbol_table = []
+    symbol_type = []
+    used_table = []
+
 }
 
 /*---------------- LEXER RULES ----------------*/
@@ -63,13 +72,13 @@ CONTINUE : 'continue' ;
 PRINT    : 'print'    ;
 READINT  : 'readint'  ;
 READSTR  : 'readstr'  ;
+DEF      : 'def'      ;
 
 PLUS  : '+' ;
 MINUS : '-' ;
 TIMES : '*' ;
 OVER  : '/' ;
 REM   : '%' ;
-
 
 OP_PAR : '(' ;
 CL_PAR : ')' ;
@@ -105,7 +114,7 @@ program:
         print('    return')
         print('.end method\n')
     }
-    main
+    ( function )* main
     ;
 
 main:
@@ -127,7 +136,29 @@ main:
     }
     ;
 
-statement: NL | st_print | st_attrib | st_if | st_while | st_break | st_continue
+function: DEF NAME OP_PAR CL_PAR COLON
+    {if 1:
+        if $NAME.text not in declare_table:
+            declare_table.append($NAME.text)
+        else:
+            sys.stderr.write('Error: function ' + $NAME.text + ' already declared\n')
+            exit(1)
+        
+        print('.method public static ' + $NAME.text + '()V')
+    }
+    INDENT ( statement )* DEDENT
+    {if 1:
+        print('    return')
+        if (len(symbol_table) > 0):
+            print('    .limit locals ' + str(len(symbol_table)))
+        print('    .limit stack ' + str(stack_max))
+        print('.end method')    
+        reset_counters()
+    }
+    ;
+        
+
+statement: st_call | NL | st_print | st_attrib | st_if | st_while | st_break | st_continue
     ;
 
 st_print:
@@ -151,7 +182,13 @@ st_print:
     }
     e2 = expression
     {if 1:
-        emit('    invokevirtual java/io/PrintStream/print(I)V\n', -2)
+        if $e2.type == 'i':
+            emit('    invokevirtual java/io/PrintStream/print(I)V\n', -2)
+        elif $e2.type == 's':
+            emit('    invokevirtual java/io/PrintStream/print(Ljava/lang/String;)V\n', -2)
+        else:
+            sys.stderr.write('**HELP**\n')
+            exit(1)
     }
     )*
     )? CL_PAR
@@ -225,6 +262,12 @@ st_continue: CONTINUE
             sys.stderr.write('Error: continue outside while\n')
             exit(1)
         emit('goto BEGIN_WHILE_' + str(while_max-1), 0)
+    }
+    ;
+
+st_call: NAME OP_PAR CL_PAR
+    {if 1:
+        emit('invokestatic Test/' + $NAME.text + '()V', 0)
     }
     ;
 
