@@ -30,4 +30,3 @@ if a == x:        # error in comparison: operator cannot use string type
 
 while y < 4:      # error in comparison: operator cannot use string type
     print("hi!")
-

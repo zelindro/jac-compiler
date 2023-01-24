@@ -13,13 +13,14 @@ import sys;
 symbol_table = []
 symbol_type = []
 used_table = []
-declare_table = []
+function_table = []
 inside_while = []
 
-stack_cur = 0 
+stack_cur = 0
 stack_max = 0
 if_max = 1
 while_max = 1
+has_error = False
 
 def emit(bytecode, delta):
     global stack_cur, stack_max
@@ -39,6 +40,9 @@ def reset_counters():
     symbol_type = []
     used_table = []
 
+def update_error():
+    global has_error
+    has_error = True
 
 
 def serializedATN():
@@ -244,7 +248,7 @@ class JacParser ( Parser ):
                     print('.method public <init>()V')
                     print('    aload_0')
                     print('    invokenonvirtual java/lang/Object/<init>()V')
-                    print('    return')
+                    print('return')
                     print('.end method\n')
                 
             self.state = 36
@@ -296,7 +300,7 @@ class JacParser ( Parser ):
         try:
             self.enterOuterAlt(localctx, 1)
             if 1:
-                    print('.method public static main([Ljava/lang/String;)V\n')
+                    print('.method public static main([Ljava/lang/String;)V')
                 
             self.state = 43 
             self._errHandler.sync(self)
@@ -311,7 +315,8 @@ class JacParser ( Parser ):
                     break
 
             if 1:
-                    print('    return')
+                    global has_error
+                    print('return')
                     if (len(symbol_table) > 0):
                         print('.limit locals ' + str(len(symbol_table)))
                     print('.limit stack ' + str(stack_max))
@@ -319,6 +324,8 @@ class JacParser ( Parser ):
                     print('\n; symbol_table:', symbol_table)
                     print('\n; symbol_type:', symbol_type)
                     print('\n; used_table:', used_table)
+                    if has_error == True:
+                        exit(1) 
                     if (False in used_table):
                         sys.stderr.write('Warning: unused variables: ' + str([symbol_table[i] for i in range(len(used_table)) if not used_table[i]]) + '\n')
                 
@@ -391,12 +398,12 @@ class JacParser ( Parser ):
             self.state = 53
             self.match(JacParser.COLON)
             if 1:
-                    if (None if localctx._NAME is None else localctx._NAME.text) not in declare_table:
-                        declare_table.append((None if localctx._NAME is None else localctx._NAME.text))
+                    global function_table
+                    if (None if localctx._NAME is None else localctx._NAME.text) not in function_table:
+                        function_table.append((None if localctx._NAME is None else localctx._NAME.text))
                     else:
                         sys.stderr.write('Error: function ' + (None if localctx._NAME is None else localctx._NAME.text) + ' already declared\n')
-                        exit(1)
-                    
+                        update_error()
                     print('.method public static ' + (None if localctx._NAME is None else localctx._NAME.text) + '()V')
                 
             self.state = 55
@@ -414,11 +421,11 @@ class JacParser ( Parser ):
             self.state = 62
             self.match(JacParser.DEDENT)
             if 1:
-                    print('    return')
+                    print('return')
                     if (len(symbol_table) > 0):
-                        print('    .limit locals ' + str(len(symbol_table)))
-                    print('    .limit stack ' + str(stack_max))
-                    print('.end method')    
+                        print('.limit locals ' + str(len(symbol_table)))
+                    print('.limit stack ' + str(stack_max))
+                    print('.end method\n')    
                     reset_counters()
                 
         except RecognitionException as re:
@@ -593,15 +600,15 @@ class JacParser ( Parser ):
             _la = self._input.LA(1)
             if (((_la) & ~0x3f) == 0 and ((1 << _la) & ((1 << JacParser.READINT) | (1 << JacParser.READSTR) | (1 << JacParser.OP_PAR) | (1 << JacParser.NAME) | (1 << JacParser.NUMBER) | (1 << JacParser.STRING))) != 0):
                 if 1:
-                        emit('    getstatic java/lang/System/out Ljava/io/PrintStream;', +1)
+                        emit('getstatic java/lang/System/out Ljava/io/PrintStream;', +1)
                     
                 self.state = 78
                 localctx.e1 = self.expression()
                 if 1:
                         if localctx.e1.type == 'i':
-                            emit('    invokevirtual java/io/PrintStream/print(I)V\n', -2)
+                            emit('invokevirtual java/io/PrintStream/print(I)V', -2)
                         elif localctx.e1.type == 's':
-                            emit('    invokevirtual java/io/PrintStream/print(Ljava/lang/String;)V\n', -2)
+                            emit('invokevirtual java/io/PrintStream/print(Ljava/lang/String;)V', -2)
                         else:
                             sys.stderr.write('**HELP**\n')
                             exit(1)
@@ -613,15 +620,15 @@ class JacParser ( Parser ):
                     self.state = 80
                     self.match(JacParser.COMMA)
                     if 1:
-                            emit('    getstatic java/lang/System/out Ljava/io/PrintStream;', +1)
+                            emit('getstatic java/lang/System/out Ljava/io/PrintStream;', +1)
                         
                     self.state = 82
                     localctx.e2 = self.expression()
                     if 1:
                             if localctx.e2.type == 'i':
-                                emit('    invokevirtual java/io/PrintStream/print(I)V\n', -2)
+                                emit('invokevirtual java/io/PrintStream/print(I)V', -2)
                             elif localctx.e2.type == 's':
-                                emit('    invokevirtual java/io/PrintStream/print(Ljava/lang/String;)V\n', -2)
+                                emit('invokevirtual java/io/PrintStream/print(Ljava/lang/String;)V', -2)
                             else:
                                 sys.stderr.write('**HELP**\n')
                                 exit(1)
@@ -635,8 +642,8 @@ class JacParser ( Parser ):
             self.state = 92
             self.match(JacParser.CL_PAR)
             if 1:
-                    emit('    getstatic java/lang/System/out Ljava/io/PrintStream;', +1)
-                    emit('    invokevirtual java/io/PrintStream/println()V\n', -1)
+                    emit('getstatic java/lang/System/out Ljava/io/PrintStream;', +1)
+                    emit('invokevirtual java/io/PrintStream/println()V', -1)
                 
         except RecognitionException as re:
             localctx.exception = re
@@ -689,10 +696,25 @@ class JacParser ( Parser ):
                         symbol_table.append((None if localctx._NAME is None else localctx._NAME.text))
                         symbol_type.append(localctx._expression.type)
                         used_table.append(False)
-                    if localctx._expression.type == 'i':
-                        emit('    istore ' +  str(symbol_table.index((None if localctx._NAME is None else localctx._NAME.text))), +1)
-                    elif localctx._expression.type == 's':
-                        emit('    astore ' +  str(symbol_table.index((None if localctx._NAME is None else localctx._NAME.text))), +1)
+
+                    if symbol_type[symbol_table.index((None if localctx._NAME is None else localctx._NAME.text))] == 'i':
+                        if localctx._expression.type == 'error' or localctx._expression.type == 's':
+                            sys.stderr.write('Error in attribution: integer variable "' + (None if localctx._NAME is None else localctx._NAME.text) + '" cannot receive a string expression\n')
+                            update_error()
+                        elif localctx._expression.type == 'i':
+                            emit('    istore ' +  str(symbol_table.index((None if localctx._NAME is None else localctx._NAME.text))), -1)
+                        else:
+                            sys.stderr.write('**HELP NAME ATTRIB**')
+                            exit(1)
+                    elif symbol_type[symbol_table.index((None if localctx._NAME is None else localctx._NAME.text))] == 's':
+                        if localctx._expression.type == 'error' or localctx._expression.type == 'i':
+                            sys.stderr.write('Error in attribution: integer variable "' + (None if localctx._NAME is None else localctx._NAME.text) + '" cannot receive a integer expression\n')
+                            update_error()
+                        elif localctx._expression.type == 's':
+                            emit('    astore ' +  str(symbol_table.index((None if localctx._NAME is None else localctx._NAME.text))), -1)
+                        else:
+                            sys.stderr.write('**HELP NAME ATTRIB**')
+                            exit(1)
                     else:
                         sys.stderr.write('**HELP NAME ATTRIB**')
                         exit(1)
@@ -993,7 +1015,7 @@ class JacParser ( Parser ):
             self.state = 135
             self.match(JacParser.CL_PAR)
             if 1:
-                    emit('invokestatic Test/' + (None if localctx._NAME is None else localctx._NAME.text) + '()V', 0)
+                    emit('invokestatic ' + (None if localctx._NAME is None else localctx._NAME.text) + '()V', 0)
                 
         except RecognitionException as re:
             localctx.exception = re
@@ -1011,7 +1033,9 @@ class JacParser ( Parser ):
             super().__init__(parent, invokingState)
             self.parser = parser
             self.type = None
+            self.e1 = None # ExpressionContext
             self.op = None # Token
+            self.e2 = None # ExpressionContext
 
         def expression(self, i:int=None):
             if i is None:
@@ -1052,7 +1076,7 @@ class JacParser ( Parser ):
         try:
             self.enterOuterAlt(localctx, 1)
             self.state = 138
-            self.expression()
+            localctx.e1 = self.expression()
             self.state = 139
             localctx.op = self._input.LT(1)
             _la = self._input.LA(1)
@@ -1062,8 +1086,12 @@ class JacParser ( Parser ):
                 self._errHandler.reportMatch(self)
                 self.consume()
             self.state = 140
-            self.expression()
+            localctx.e2 = self.expression()
             if 1:
+                    if localctx.e1.type != localctx.e2.type:
+                        sys.stderr.write('Error in comparison: operator cannot use string type\n')
+                        update_error()
+
                     if (0 if localctx.op is None else localctx.op.type) == JacParser.EQ:
                         localctx.type = 'if_icmpne'
                     elif (0 if localctx.op is None else localctx.op.type) == JacParser.NE:
@@ -1092,7 +1120,9 @@ class JacParser ( Parser ):
         def __init__(self, parser, parent:ParserRuleContext=None, invokingState:int=-1):
             super().__init__(parent, invokingState)
             self.parser = parser
+            self.e1 = None # ExpressionContext
             self.op = None # Token
+            self.e2 = None # ExpressionContext
 
         def expression(self, i:int=None):
             if i is None:
@@ -1133,7 +1163,7 @@ class JacParser ( Parser ):
         try:
             self.enterOuterAlt(localctx, 1)
             self.state = 143
-            self.expression()
+            localctx.e1 = self.expression()
             self.state = 144
             localctx.op = self._input.LT(1)
             _la = self._input.LA(1)
@@ -1143,8 +1173,12 @@ class JacParser ( Parser ):
                 self._errHandler.reportMatch(self)
                 self.consume()
             self.state = 145
-            self.expression()
+            localctx.e2 = self.expression()
             if 1:
+                    if localctx.e1.type != localctx.e2.type:
+                        sys.stderr.write('Error in comparison: operator cannot use string type\n')
+                        update_error()
+
                     if (0 if localctx.op is None else localctx.op.type) == JacParser.EQ:
                         emit('if_icmpne END_WHILE_'+str(while_max), -2)
                     elif (0 if localctx.op is None else localctx.op.type) == JacParser.NE:
@@ -1227,10 +1261,15 @@ class JacParser ( Parser ):
                 self.state = 150
                 localctx.t2 = self.term()
                 if 1:
-                        if (0 if localctx.op is None else localctx.op.type) == JacParser.PLUS:
-                            emit('    iadd', -1)
+                        if localctx.t1.type != localctx.t2.type or localctx.t1.type == 's' or localctx.t2.type == 's':
+                            sys.stderr.write('Error in expression: operator cannot use string type\n')
+                            update_error()
+
                         else:
-                            emit('    isub', -1)
+                            if (0 if localctx.op is None else localctx.op.type) == JacParser.PLUS:
+                                emit('    iadd', -1)
+                            else:
+                                emit('    isub', -1)
                     
                 self.state = 157
                 self._errHandler.sync(self)
@@ -1314,12 +1353,17 @@ class JacParser ( Parser ):
                 self.state = 162
                 localctx.f2 = self.factor()
                 if 1:
-                        if (0 if localctx.op is None else localctx.op.type) == JacParser.TIMES:
-                            emit('    imul', -1)
-                        elif (0 if localctx.op is None else localctx.op.type) == JacParser.OVER:
-                            emit('    idiv', -1)
+                        if localctx.f1.type != localctx.f2.type or localctx.f1.type == 's' or localctx.f2.type == 's':
+                            sys.stderr.write('Error in term: operator cannot use string type\n')
+                            update_error()
+
                         else:
-                            emit('    irem', -1)
+                            if (0 if localctx.op is None else localctx.op.type) == JacParser.TIMES:
+                                emit('    imul', -1)
+                            elif (0 if localctx.op is None else localctx.op.type) == JacParser.OVER:
+                                emit('    idiv', -1)
+                            else:
+                                emit('    irem', -1)
                     
                 self.state = 169
                 self._errHandler.sync(self)
@@ -1425,6 +1469,7 @@ class JacParser ( Parser ):
                 if 1:
                         if (None if localctx._NAME is None else localctx._NAME.text) not in symbol_table:
                             sys.stderr.write('Variable ' + (None if localctx._NAME is None else localctx._NAME.text) + ' is not defined\n')
+                            localctx.type = 'error'
                             sys.exit(1)
                         elif symbol_type[symbol_table.index((None if localctx._NAME is None else localctx._NAME.text))] == 'i':
                             emit('    iload ' +  str(symbol_table.index((None if localctx._NAME is None else localctx._NAME.text))), +1)
@@ -1445,7 +1490,7 @@ class JacParser ( Parser ):
                 self.state = 185
                 self.match(JacParser.CL_PAR)
                 if 1:
-                        emit('    invokestatic Runtime/readInt()I', +1)
+                        emit('invokestatic Runtime/readInt()I', +1)
                         localctx.type = 'i'
                     
                 pass
@@ -1458,7 +1503,7 @@ class JacParser ( Parser ):
                 self.state = 189
                 self.match(JacParser.CL_PAR)
                 if 1:
-                        emit('    invokestatic Runtime/readString()Ljava/lang/String;', +1)
+                        emit('invokestatic Runtime/readString()Ljava/lang/String;', +1)
                         localctx.type = 's'
                     
                 pass

@@ -4,13 +4,14 @@ import sys;
 symbol_table = []
 symbol_type = []
 used_table = []
-declare_table = []
+function_table = []
 inside_while = []
 
-stack_cur = 0 
+stack_cur = 0
 stack_max = 0
 if_max = 1
 while_max = 1
+has_error = False
 
 def emit(bytecode, delta):
     global stack_cur, stack_max
@@ -30,6 +31,9 @@ def reset_counters():
     symbol_type = []
     used_table = []
 
+def update_error():
+    global has_error
+    has_error = True
 
 import org.antlr.v4.runtime.atn.*;
 import org.antlr.v4.runtime.dfa.DFA;
@@ -163,7 +167,7 @@ public class JacParser extends Parser {
 			        print('.method public <init>()V')
 			        print('    aload_0')
 			        print('    invokenonvirtual java/lang/Object/<init>()V')
-			        print('    return')
+			        print('return')
 			        print('.end method\n')
 			    
 			setState(36);
@@ -216,7 +220,7 @@ public class JacParser extends Parser {
 			enterOuterAlt(_localctx, 1);
 			{
 			if 1:
-			        print('.method public static main([Ljava/lang/String;)V\n')
+			        print('.method public static main([Ljava/lang/String;)V')
 			    
 			setState(43); 
 			_errHandler.sync(this);
@@ -233,7 +237,8 @@ public class JacParser extends Parser {
 				_la = _input.LA(1);
 			} while ( (((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << IF) | (1L << WHILE) | (1L << BREAK) | (1L << CONTINUE) | (1L << PRINT) | (1L << NAME) | (1L << NL))) != 0) );
 			if 1:
-			        print('    return')
+			        global has_error
+			        print('return')
 			        if (len(symbol_table) > 0):
 			            print('.limit locals ' + str(len(symbol_table)))
 			        print('.limit stack ' + str(stack_max))
@@ -241,6 +246,8 @@ public class JacParser extends Parser {
 			        print('\n; symbol_table:', symbol_table)
 			        print('\n; symbol_type:', symbol_type)
 			        print('\n; used_table:', used_table)
+			        if has_error == True:
+			            exit(1) 
 			        if (False in used_table):
 			            sys.stderr.write('Warning: unused variables: ' + str([symbol_table[i] for i in range(len(used_table)) if not used_table[i]]) + '\n')
 			    
@@ -296,12 +303,12 @@ public class JacParser extends Parser {
 			setState(53);
 			match(COLON);
 			if 1:
-			        if (((FunctionContext)_localctx).NAME!=null?((FunctionContext)_localctx).NAME.getText():null) not in declare_table:
-			            declare_table.append((((FunctionContext)_localctx).NAME!=null?((FunctionContext)_localctx).NAME.getText():null))
+			        global function_table
+			        if (((FunctionContext)_localctx).NAME!=null?((FunctionContext)_localctx).NAME.getText():null) not in function_table:
+			            function_table.append((((FunctionContext)_localctx).NAME!=null?((FunctionContext)_localctx).NAME.getText():null))
 			        else:
 			            sys.stderr.write('Error: function ' + (((FunctionContext)_localctx).NAME!=null?((FunctionContext)_localctx).NAME.getText():null) + ' already declared\n')
-			            exit(1)
-			        
+			            update_error()
 			        print('.method public static ' + (((FunctionContext)_localctx).NAME!=null?((FunctionContext)_localctx).NAME.getText():null) + '()V')
 			    
 			setState(55);
@@ -323,11 +330,11 @@ public class JacParser extends Parser {
 			setState(62);
 			match(DEDENT);
 			if 1:
-			        print('    return')
+			        print('return')
 			        if (len(symbol_table) > 0):
-			            print('    .limit locals ' + str(len(symbol_table)))
-			        print('    .limit stack ' + str(stack_max))
-			        print('.end method')    
+			            print('.limit locals ' + str(len(symbol_table)))
+			        print('.limit stack ' + str(stack_max))
+			        print('.end method\n')    
 			        reset_counters()
 			    
 			}
@@ -487,15 +494,15 @@ public class JacParser extends Parser {
 			if ((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << READINT) | (1L << READSTR) | (1L << OP_PAR) | (1L << NAME) | (1L << NUMBER) | (1L << STRING))) != 0)) {
 				{
 				if 1:
-				        emit('    getstatic java/lang/System/out Ljava/io/PrintStream;', +1)
+				        emit('getstatic java/lang/System/out Ljava/io/PrintStream;', +1)
 				    
 				setState(78);
 				((St_printContext)_localctx).e1 = expression();
 				if 1:
 				        if ((St_printContext)_localctx).e1.type == 'i':
-				            emit('    invokevirtual java/io/PrintStream/print(I)V\n', -2)
+				            emit('invokevirtual java/io/PrintStream/print(I)V', -2)
 				        elif ((St_printContext)_localctx).e1.type == 's':
-				            emit('    invokevirtual java/io/PrintStream/print(Ljava/lang/String;)V\n', -2)
+				            emit('invokevirtual java/io/PrintStream/print(Ljava/lang/String;)V', -2)
 				        else:
 				            sys.stderr.write('**HELP**\n')
 				            exit(1)
@@ -509,15 +516,15 @@ public class JacParser extends Parser {
 					setState(80);
 					match(COMMA);
 					if 1:
-					        emit('    getstatic java/lang/System/out Ljava/io/PrintStream;', +1)
+					        emit('getstatic java/lang/System/out Ljava/io/PrintStream;', +1)
 					    
 					setState(82);
 					((St_printContext)_localctx).e2 = expression();
 					if 1:
 					        if ((St_printContext)_localctx).e2.type == 'i':
-					            emit('    invokevirtual java/io/PrintStream/print(I)V\n', -2)
+					            emit('invokevirtual java/io/PrintStream/print(I)V', -2)
 					        elif ((St_printContext)_localctx).e2.type == 's':
-					            emit('    invokevirtual java/io/PrintStream/print(Ljava/lang/String;)V\n', -2)
+					            emit('invokevirtual java/io/PrintStream/print(Ljava/lang/String;)V', -2)
 					        else:
 					            sys.stderr.write('**HELP**\n')
 					            exit(1)
@@ -534,8 +541,8 @@ public class JacParser extends Parser {
 			setState(92);
 			match(CL_PAR);
 			if 1:
-			        emit('    getstatic java/lang/System/out Ljava/io/PrintStream;', +1)
-			        emit('    invokevirtual java/io/PrintStream/println()V\n', -1)
+			        emit('getstatic java/lang/System/out Ljava/io/PrintStream;', +1)
+			        emit('invokevirtual java/io/PrintStream/println()V', -1)
 			    
 			}
 		}
@@ -581,10 +588,25 @@ public class JacParser extends Parser {
 			            symbol_table.append((((St_attribContext)_localctx).NAME!=null?((St_attribContext)_localctx).NAME.getText():null))
 			            symbol_type.append(((St_attribContext)_localctx).expression.type)
 			            used_table.append(False)
-			        if ((St_attribContext)_localctx).expression.type == 'i':
-			            emit('    istore ' +  str(symbol_table.index((((St_attribContext)_localctx).NAME!=null?((St_attribContext)_localctx).NAME.getText():null))), +1)
-			        elif ((St_attribContext)_localctx).expression.type == 's':
-			            emit('    astore ' +  str(symbol_table.index((((St_attribContext)_localctx).NAME!=null?((St_attribContext)_localctx).NAME.getText():null))), +1)
+
+			        if symbol_type[symbol_table.index((((St_attribContext)_localctx).NAME!=null?((St_attribContext)_localctx).NAME.getText():null))] == 'i':
+			            if ((St_attribContext)_localctx).expression.type == 'error' or ((St_attribContext)_localctx).expression.type == 's':
+			                sys.stderr.write('Error in attribution: integer variable "' + (((St_attribContext)_localctx).NAME!=null?((St_attribContext)_localctx).NAME.getText():null) + '" cannot receive a string expression\n')
+			                update_error()
+			            elif ((St_attribContext)_localctx).expression.type == 'i':
+			                emit('    istore ' +  str(symbol_table.index((((St_attribContext)_localctx).NAME!=null?((St_attribContext)_localctx).NAME.getText():null))), -1)
+			            else:
+			                sys.stderr.write('**HELP NAME ATTRIB**')
+			                exit(1)
+			        elif symbol_type[symbol_table.index((((St_attribContext)_localctx).NAME!=null?((St_attribContext)_localctx).NAME.getText():null))] == 's':
+			            if ((St_attribContext)_localctx).expression.type == 'error' or ((St_attribContext)_localctx).expression.type == 'i':
+			                sys.stderr.write('Error in attribution: integer variable "' + (((St_attribContext)_localctx).NAME!=null?((St_attribContext)_localctx).NAME.getText():null) + '" cannot receive a integer expression\n')
+			                update_error()
+			            elif ((St_attribContext)_localctx).expression.type == 's':
+			                emit('    astore ' +  str(symbol_table.index((((St_attribContext)_localctx).NAME!=null?((St_attribContext)_localctx).NAME.getText():null))), -1)
+			            else:
+			                sys.stderr.write('**HELP NAME ATTRIB**')
+			                exit(1)
 			        else:
 			            sys.stderr.write('**HELP NAME ATTRIB**')
 			            exit(1)
@@ -866,7 +888,9 @@ public class JacParser extends Parser {
 
 	public static class Comparison_ifContext extends ParserRuleContext {
 		public  type;
+		public ExpressionContext e1;
 		public Token op;
+		public ExpressionContext e2;
 		public List<ExpressionContext> expression() {
 			return getRuleContexts(ExpressionContext.class);
 		}
@@ -893,7 +917,7 @@ public class JacParser extends Parser {
 			enterOuterAlt(_localctx, 1);
 			{
 			setState(138);
-			expression();
+			((Comparison_ifContext)_localctx).e1 = expression();
 			setState(139);
 			((Comparison_ifContext)_localctx).op = _input.LT(1);
 			_la = _input.LA(1);
@@ -906,8 +930,12 @@ public class JacParser extends Parser {
 				consume();
 			}
 			setState(140);
-			expression();
+			((Comparison_ifContext)_localctx).e2 = expression();
 			if 1:
+			        if ((Comparison_ifContext)_localctx).e1.type != ((Comparison_ifContext)_localctx).e2.type:
+			            sys.stderr.write('Error in comparison: operator cannot use string type\n')
+			            update_error()
+
 			        if (((Comparison_ifContext)_localctx).op!=null?((Comparison_ifContext)_localctx).op.getType():0) == JacParser.EQ:
 			            _localctx.type = 'if_icmpne'
 			        elif (((Comparison_ifContext)_localctx).op!=null?((Comparison_ifContext)_localctx).op.getType():0) == JacParser.NE:
@@ -935,7 +963,9 @@ public class JacParser extends Parser {
 	}
 
 	public static class Comparison_whileContext extends ParserRuleContext {
+		public ExpressionContext e1;
 		public Token op;
+		public ExpressionContext e2;
 		public List<ExpressionContext> expression() {
 			return getRuleContexts(ExpressionContext.class);
 		}
@@ -962,7 +992,7 @@ public class JacParser extends Parser {
 			enterOuterAlt(_localctx, 1);
 			{
 			setState(143);
-			expression();
+			((Comparison_whileContext)_localctx).e1 = expression();
 			setState(144);
 			((Comparison_whileContext)_localctx).op = _input.LT(1);
 			_la = _input.LA(1);
@@ -975,8 +1005,12 @@ public class JacParser extends Parser {
 				consume();
 			}
 			setState(145);
-			expression();
+			((Comparison_whileContext)_localctx).e2 = expression();
 			if 1:
+			        if ((Comparison_whileContext)_localctx).e1.type != ((Comparison_whileContext)_localctx).e2.type:
+			            sys.stderr.write('Error in comparison: operator cannot use string type\n')
+			            update_error()
+
 			        if (((Comparison_whileContext)_localctx).op!=null?((Comparison_whileContext)_localctx).op.getType():0) == JacParser.EQ:
 			            emit('if_icmpne END_WHILE_'+str(while_max), -2)
 			        elif (((Comparison_whileContext)_localctx).op!=null?((Comparison_whileContext)_localctx).op.getType():0) == JacParser.NE:
@@ -1057,10 +1091,15 @@ public class JacParser extends Parser {
 				setState(150);
 				((ExpressionContext)_localctx).t2 = term();
 				if 1:
-				        if (((ExpressionContext)_localctx).op!=null?((ExpressionContext)_localctx).op.getType():0) == JacParser.PLUS:
-				            emit('    iadd', -1)
+				        if ((ExpressionContext)_localctx).t1.type != ((ExpressionContext)_localctx).t2.type or ((ExpressionContext)_localctx).t1.type == 's' or ((ExpressionContext)_localctx).t2.type == 's':
+				            sys.stderr.write('Error in expression: operator cannot use string type\n')
+				            update_error()
+
 				        else:
-				            emit('    isub', -1)
+				            if (((ExpressionContext)_localctx).op!=null?((ExpressionContext)_localctx).op.getType():0) == JacParser.PLUS:
+				                emit('    iadd', -1)
+				            else:
+				                emit('    isub', -1)
 				    
 				}
 				}
@@ -1142,12 +1181,17 @@ public class JacParser extends Parser {
 				setState(162);
 				((TermContext)_localctx).f2 = factor();
 				if 1:
-				        if (((TermContext)_localctx).op!=null?((TermContext)_localctx).op.getType():0) == JacParser.TIMES:
-				            emit('    imul', -1)
-				        elif (((TermContext)_localctx).op!=null?((TermContext)_localctx).op.getType():0) == JacParser.OVER:
-				            emit('    idiv', -1)
+				        if ((TermContext)_localctx).f1.type != ((TermContext)_localctx).f2.type or ((TermContext)_localctx).f1.type == 's' or ((TermContext)_localctx).f2.type == 's':
+				            sys.stderr.write('Error in term: operator cannot use string type\n')
+				            update_error()
+
 				        else:
-				            emit('    irem', -1)
+				            if (((TermContext)_localctx).op!=null?((TermContext)_localctx).op.getType():0) == JacParser.TIMES:
+				                emit('    imul', -1)
+				            elif (((TermContext)_localctx).op!=null?((TermContext)_localctx).op.getType():0) == JacParser.OVER:
+				                emit('    idiv', -1)
+				            else:
+				                emit('    irem', -1)
 				    
 				}
 				}
@@ -1244,6 +1288,7 @@ public class JacParser extends Parser {
 				if 1:
 				        if (((FactorContext)_localctx).NAME!=null?((FactorContext)_localctx).NAME.getText():null) not in symbol_table:
 				            sys.stderr.write('Variable ' + (((FactorContext)_localctx).NAME!=null?((FactorContext)_localctx).NAME.getText():null) + ' is not defined\n')
+				            _localctx.type = 'error'
 				            sys.exit(1)
 				        elif symbol_type[symbol_table.index((((FactorContext)_localctx).NAME!=null?((FactorContext)_localctx).NAME.getText():null))] == 'i':
 				            emit('    iload ' +  str(symbol_table.index((((FactorContext)_localctx).NAME!=null?((FactorContext)_localctx).NAME.getText():null))), +1)
@@ -1266,7 +1311,7 @@ public class JacParser extends Parser {
 				setState(185);
 				match(CL_PAR);
 				if 1:
-				        emit('    invokestatic Runtime/readInt()I', +1)
+				        emit('invokestatic Runtime/readInt()I', +1)
 				        _localctx.type = 'i'
 				    
 				}
@@ -1281,7 +1326,7 @@ public class JacParser extends Parser {
 				setState(189);
 				match(CL_PAR);
 				if 1:
-				        emit('    invokestatic Runtime/readString()Ljava/lang/String;', +1)
+				        emit('invokestatic Runtime/readString()Ljava/lang/String;', +1)
 				        _localctx.type = 's'
 				    
 				}
