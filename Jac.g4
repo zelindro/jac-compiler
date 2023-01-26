@@ -33,6 +33,7 @@ used_table = []
 function_table = []
 inside_while = []
 param_table = []
+
 stack_cur = 0
 stack_max = 0
 if_max = 1
@@ -42,21 +43,25 @@ has_error = False
 function_error = False
 has_return = False
 assin = False
+
 def emit(bytecode, delta):
     global stack_cur, stack_max
     stack_cur += delta
     if stack_cur > stack_max:
         stack_max = stack_cur
     print('    ' + bytecode + '    ; delta=' + str(delta))
+
 def if_counter():
     global if_max
     if_max += 1
+
 def reset_counters():
     global stack_max, symbol_table, symbol_type, used_table
     stack_max = 0
     symbol_table = []
     symbol_type = []
     used_table = []
+
 def update_error():
     global has_error
     has_error = True
