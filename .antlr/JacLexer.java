@@ -97,12 +97,9 @@ public class JacLexer extends Lexer {
 	    def __init__(self, lexer, nl_token, indent_token, dedent_token, ignore_eof):
 	        super().__init__(nl_token, indent_token, dedent_token, ignore_eof)
 	        self.lexer: JacLexer = lexer
-
 	    def pull_token(self):
 	        return super(JacLexer, self.lexer).nextToken()
-
 	denter = None
-
 	def nextToken(self):
 	    if not self.denter:
 	        self.denter = self.JacDenter(self, self.NL, JacParser.INDENT, JacParser.DEDENT, False)
