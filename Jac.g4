@@ -35,12 +35,17 @@ symbol_type = []
 used_table = []
 function_table = []
 inside_while = []
+param_table = []
 
 stack_cur = 0
 stack_max = 0
 if_max = 1
 while_max = 1
+arg_max = 0
 has_error = False
+function_error = False
+has_return = False
+assin = False
 
 def emit(bytecode, delta):
     global stack_cur, stack_max
@@ -115,7 +120,7 @@ program:
         print('.method public <init>()V')
         print('    aload_0')
         print('    invokenonvirtual java/lang/Object/<init>()V')
-        print('return')
+        print('    return')
         print('.end method\n')
     }    
     ( function )* main
@@ -143,29 +148,59 @@ main:
     }
     ;
 
-function: DEF NAME OP_PAR CL_PAR COLON
+function: DEF NAME OP_PAR ( parameters )? CL_PAR COLON
     {if 1:
-        global function_table
+        global function_table, param_table, symbol_table
+        assin = True
+
         if $NAME.text not in function_table:
             function_table.append($NAME.text)
         else:
             sys.stderr.write('Error: function ' + $NAME.text + ' already declared\n')
             update_error()
-        print('.method public static ' + $NAME.text + '()V')
     }
-    INDENT ( statement )* DEDENT
+    INDENT 
+    {if 1:
+        I = ''
+        for l in range(0, len(symbol_table)):
+            I = I + 'I'
+        param_table.append(len(symbol_table))
+        if $NAME.text + 'I' not in function_table and $NAME.text + 'V' not in function_table:
+            print('.method public static ' + $NAME.text + '(' + I + ')V')
+    }
+    ( statement )* DEDENT
     {if 1:
         print('return')
         if (len(symbol_table) > 0):
             print('.limit locals ' + str(len(symbol_table)))
         print('.limit stack ' + str(stack_max))
-        print('.end method\n')    
+        print('.end method\n')
+
         reset_counters()
     }
     ; 
 
-statement: st_call | NL | st_print | st_attrib | st_if | st_while | st_break | st_continue
-    ;
+parameters: 
+    NAME
+    {if 1:
+        symbol_table.append($NAME.text)
+        used_table.append(False)
+        symbol_type.append('i')
+    } 
+    ( COMMA NAME
+    {if 1:
+        if $NAME.text in symbol_table:
+            sys.stderr.write('Error: variable ' + $NAME.text + ' already declared\n')
+            update_error()
+        else:
+            symbol_table.append($NAME.text)
+            used_table.append(False)
+            symbol_type.append('i')
+    }
+    )*
+    ;        
+
+statement: st_call | NL | st_print | st_attrib | st_if | st_while | st_break | st_continue;
 
 st_print:
     PRINT OP_PAR(
@@ -286,10 +321,45 @@ st_continue: CONTINUE
     }
     ;
 
-st_call: NAME OP_PAR CL_PAR
+st_call: NAME OP_PAR ( arguments )? CL_PAR
     {if 1:
-        emit('invokestatic Test/' + $NAME.text + '()V', 0)
+        global function_table, arg_max, function_error
+        I = ''
+        if $NAME.text in function_table:
+            if param_table[function_table.index($NAME.text)] != arg_max:
+                sys.stderr.write('Error in function call: wrong number of arguments\n')
+                update_error()
+            if function_error:
+                sys.stderr.write('Error in function call: wrong type of arguments\n')
+                update_error()
+            for j in range(0, arg_max):
+                I += 'I'
+            print('    invokestatic Test/' + $NAME.text + '(' + I + ')V')
+        else:
+            sys.stderr.write('Error in function call: function "' + $NAME.text + '" not declared\n')
+            update_error()
+        
     }
+    ;
+
+arguments: 
+    {if 1:
+        global arg_max, function_error
+        arg_max = 0
+    }
+    e1 = expression
+    {if 1:
+        arg_max += 1
+        if $e1.type != 'i':
+            function_error = True
+    }
+    ( COMMA e2 = expression
+    {if 1:
+        arg_max += 1
+        if $e2.type != 'i':
+            function_error = True
+    }
+    )*
     ;
 
 comparison_if returns [type]: e1 = expression op = ( EQ | NE | GT | GE | LT | LE ) e2 = expression
